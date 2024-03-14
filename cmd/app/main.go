@@ -24,7 +24,4 @@ func main() {
 	postgres.Migrate(db)
 
 	rest.MountEndpoint()
-
-	// Generate OTP
-	rest.Serve()
 }

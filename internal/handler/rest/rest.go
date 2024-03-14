@@ -7,7 +7,6 @@ import (
 	"INTERN_BCC/pkg/middleware"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"time"
@@ -32,29 +31,47 @@ func NewRest(service *service.Service, middleware middleware.Interface) *Rest {
 func (r *Rest) MountEndpoint() {
 	r.router.Use(r.middleware.Timeout())
 
-	routerGroup := r.router.Group("/api/v1")
+	v1 := r.router.Group("/api/v1")
 
-	routerGroup.GET("/health-check", healthCheck)
+	v1.GET("/health-check", healthCheck)
 
-	routerGroup.GET("/time-out", testTimeout)
+	v1.GET("/time-out", testTimeout)
 
-	routerGroup.GET("/login-user", r.middleware.AuthenticateUser, getLoginUser)
+	v1.GET("/login-user", r.middleware.AuthenticateUser, getLoginUser)
 
-	routerGroup.POST("/register", r.Register)
-	routerGroup.POST("/login", r.Login)
+	v1.POST("/register", r.Register)
+	v1.POST("/login", r.Login)
 
 	// user.POST("/profile/upload", r.middleware.AuthenticateUser, r.UploadPhoto)
 
-}
+	// City
+	cityGroup := v1.Group("/city")
+	cityGroup.GET("/get-city/:id", r.GetCity)
+	cityGroup.GET("/get-city/all-of-the-cities", r.GetAllCity)
 
-func (r *Rest) Serve() {
-	addr := os.Getenv("APP_ADDRESS")
-	port := os.Getenv("APP_PORT")
+	// Place
+	placeGroup := v1.Group("/place")
+	placeGroup.POST("/create-place", r.CreatePlace)
+	placeGroup.GET("/get-place/id", r.GetPlaceByID)
+	placeGroup.GET("/get-place/all-of-the-places", r.GetAllPlace)
 
-	err := r.router.Run(fmt.Sprintf("%s:%s", addr, port))
-	if err != nil {
-		log.Fatalf("Error while serving: %v", err)
-	}
+	// Culinary
+	CulinaryGroup := v1.Group("/culinary")
+	CulinaryGroup.POST("/create-culinary", r.CreateCulinary)
+	CulinaryGroup.GET("/get-culinary/:id", r.GetCulinaryByID)
+	CulinaryGroup.GET("/get-culinary/all-of-the-culinaries", r.GetAllCulinary)
+	// v1.GET("/culinary/search", r.SearchCulinary)
+
+	// Ticket
+	v1.POST("/ticket", r.CreateTicket)
+	v1.GET("/ticket/:id", r.GetTicketByID)
+
+	port := os.Getenv("PORT")
+    if port == "" {
+        port = "8000"
+    }
+
+    r.router.Run(fmt.Sprintf(":%s", port))
 }
 
 func healthCheck(ctx *gin.Context) {
