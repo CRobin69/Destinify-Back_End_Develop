@@ -52,7 +52,7 @@ func (r *Rest) MountEndpoint() {
 	// Place
 	placeGroup := v1.Group("/place")
 	placeGroup.POST("/create-place", r.CreatePlace)
-	placeGroup.GET("/get-place/id", r.GetPlaceByID)
+	placeGroup.GET("/get-place/:id", r.GetPlaceByID)
 	placeGroup.GET("/get-place/all-of-the-places", r.GetAllPlace)
 
 	// Culinary

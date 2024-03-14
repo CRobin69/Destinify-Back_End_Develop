@@ -1,6 +1,6 @@
 package service
 
-import( 
+import (
 	"INTERN_BCC/entity"
 	"INTERN_BCC/internal/repository"
 	"INTERN_BCC/model"
@@ -22,7 +22,7 @@ func NewTicketService(ticketRepository repository.ITicketRepository) ITicketServ
 }
 
 func (ts *TicketService) CreateTicket(param model.TicketCreate) error {
-	totalPrice  := param.TicketPrice * param.TicketQuantity
+	totalPrice := param.TicketPrice * param.TicketQuantity
 	ticket := entity.Ticket{
 		ID:             param.ID,
 		PlaceID:        param.PlaceID,

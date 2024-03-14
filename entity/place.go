@@ -6,7 +6,7 @@ import (
 
 type Place struct {
 	ID            uint      `json:"id" gorm:"primary_key; unique;"`
-	Name          string    `json:"name" gorm:"type:varchar(36);not null;"`
+	Name          string    `json:"name" gorm:"type:varchar(100);not null;"`
 	CityID        uint	    `json:"cityid" gorm:";foreignkey:ID;references:cities;onUpdate:CASCADE;onDelete:CASCADE"`
 	PlaceDesc     string    `json:"place_desc" gorm:"type:varchar(1200);not null;"`
 	PlaceAddress  string    `json:"place_address" gorm:"type:varchar(120);not null;"`

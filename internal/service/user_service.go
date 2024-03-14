@@ -40,7 +40,7 @@ func (u *UserService) Register(param model.UserRegister) error {
 
 	user := entity.User{
 		ID:       param.ID,
-		PhoneNumber: 	  param.PhoneNumber,
+		HP: 	  param.HP,
 		Name:     param.Name,
 		Email:    param.Email,
 		Password: param.Password,

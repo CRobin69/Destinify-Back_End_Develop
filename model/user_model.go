@@ -6,7 +6,7 @@ import (
 
 type UserRegister struct {
 	ID              uuid.UUID `json:"-"`
-	PhoneNumber     string    `json:"hp" binding:"required"`
+	HP    			string    `json:"hp" binding:"required"`
 	Name            string    `json:"name" binding:"required"`
 	Email           string    `json:"email" binding:"required,email"`
 	Password        string    `json:"password" binding:"required,min=8"`
