@@ -8,6 +8,7 @@ type Repository struct {
 	PlaceRepository IPlaceRepository
 	CulinaryRepository ICulinaryRepository
 	TicketRepository ITicketRepository
+	GuideRepository IGuideRepository
 }
 
 func NewRepository(db *gorm.DB) *Repository {
@@ -16,6 +17,7 @@ func NewRepository(db *gorm.DB) *Repository {
 	placeRepository := NewPlaceRepository(db)
 	culinaryRepository := NewCulinaryRepository(db)
 	ticketRepository := NewTicketRepository(db)
+	guideRepository := NewGuideRepository(db)
 
 	return &Repository{
 		UserRepository: userRepository,
@@ -23,6 +25,7 @@ func NewRepository(db *gorm.DB) *Repository {
 		PlaceRepository: placeRepository,
 		CulinaryRepository: culinaryRepository,
 		TicketRepository: ticketRepository,
+		GuideRepository: guideRepository,
 		
 	}
 }

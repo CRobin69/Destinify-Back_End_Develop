@@ -1,9 +1,9 @@
 package model
 
-import "github.com/google/uuid"
+
 
 type CulinaryCreate struct {
-	ID                 uuid.UUID `json:"-"`
+	ID                 uint 	 `json:"-"`
 	Name               string    `json:"name" binding:"required"`
 	CityID             uint      `json:"cityid" binding:"required"`
 	CulinaryDesc       string    `json:"culinary_desc" binding:"required"`
@@ -16,7 +16,7 @@ type CulinaryCreate struct {
 }
 
 type CulinaryParam struct {
-	ID     uuid.UUID `json:"-"`
+	ID     uint		 `json:"-"`
 	Name   string    `json:"name"`
 	CityID uint      `json:"cityid"`
 }

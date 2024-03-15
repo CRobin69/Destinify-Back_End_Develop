@@ -21,6 +21,6 @@ type PlaceCreate struct {
 
 type PlaceParam struct{
 	ID 		uint 		`json:"-"`
-	Name 	string  	`json:"name"`
-	CityID 	uint  		`json:"cityid"`
+	Name 	string  	`json:"-"`
+	CityID 	uint  		`json:"-"`
 }

@@ -14,6 +14,6 @@ type TicketBuy struct {
 
 type TicketParam struct {
 	ID      uuid.UUID `json:"-"`
-	PlaceID uuid.UUID `json:"placeid" binding:"required"`
-	UserID  uuid.UUID `json:"userid" binding:"required"`
+	PlaceID uuid.UUID `json:"-"`
+	UserID  uuid.UUID `json:"-"`
 }

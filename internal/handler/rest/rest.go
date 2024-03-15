@@ -22,8 +22,8 @@ type Rest struct {
 
 func NewRest(service *service.Service, middleware middleware.Interface) *Rest {
 	return &Rest{
-		router:  gin.Default(),
-		service: service,
+		router:     gin.Default(),
+		service:    service,
 		middleware: middleware,
 	}
 }
@@ -66,12 +66,19 @@ func (r *Rest) MountEndpoint() {
 	v1.POST("/ticket", r.BuyTicket)
 	v1.GET("/ticket/:id", r.GetTicketByID)
 
-	port := os.Getenv("PORT")
-    if port == "" {
-        port = "8000"
-    }
+	// Guide
+	guideGroup := v1.Group("/guide")
+	guideGroup.POST("/create-guide", r.CreateGuide)
+	guideGroup.GET("/get-guide/:id", r.GetGuideByID)
+	guideGroup.GET("/get-guide/all-of-the-guides", r.GetAllGuide)
+	guideGroup.PATCH("/patch-guide", r.PatchGuide)
 
-    r.router.Run(fmt.Sprintf(":%s", port))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
+
+	r.router.Run(fmt.Sprintf(":%s", port))
 }
 
 func healthCheck(ctx *gin.Context) {
