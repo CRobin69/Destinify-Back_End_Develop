@@ -8,6 +8,7 @@ type Service struct {
 	CityService ICityService
 	PlaceService IPlaceService
 	CulinaryService ICulinaryService
+	GuideService IGuideService
 }
 
 func NewService(Repository *repository.Repository) *Service {
@@ -16,6 +17,7 @@ func NewService(Repository *repository.Repository) *Service {
 	cityService := NewCityService(Repository.CityRepository)
 	placeService := NewPlaceService(Repository.PlaceRepository)
 	culinaryService := NewCulinaryService(Repository.CulinaryRepository)
+	guideService := NewGuideService(Repository.GuideRepository)
 
 	return &Service{
 		UserService: userService,
@@ -23,5 +25,6 @@ func NewService(Repository *repository.Repository) *Service {
 		CityService: cityService,
 		PlaceService: placeService,
 		CulinaryService: culinaryService,
+		GuideService: guideService,
 	}
 }
