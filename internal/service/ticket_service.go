@@ -4,10 +4,12 @@ import (
 	"INTERN_BCC/entity"
 	"INTERN_BCC/internal/repository"
 	"INTERN_BCC/model"
+
+	"github.com/google/uuid"
 )
 
 type ITicketService interface {
-	CreateTicket(param model.TicketCreate) error
+	BuyTicket(param model.TicketBuy) ([]entity.Ticket, error)
 	GetTicketByID(param model.TicketParam) (entity.Ticket, error)
 }
 
@@ -21,23 +23,22 @@ func NewTicketService(ticketRepository repository.ITicketRepository) ITicketServ
 	}
 }
 
-func (ts *TicketService) CreateTicket(param model.TicketCreate) error {
-	totalPrice := param.TicketPrice * param.TicketQuantity
-	ticket := entity.Ticket{
-		ID:             param.ID,
-		PlaceID:        param.PlaceID,
-		TicketPrice:    param.TicketPrice,
-		TicketDate:     param.TicketDate,
-		TicketQuantity: param.TicketQuantity,
-		TotalPrice:     totalPrice,
-		UserID:         param.UserID,
+func (ts *TicketService) BuyTicket(param model.TicketBuy) ([]entity.Ticket, error) {
+	var tickets []entity.Ticket
+	for i := 0; i < param.TicketQuantity; i++ {
+		ticket := entity.Ticket{
+			ID:          uuid.New(),
+			PlaceID:     param.PlaceID,
+			UserID:      param.UserID,
+			TicketPrice: param.TicketPrice,
+		}
+		createdTicket, err := ts.tr.BuyTicket(ticket)
+		if err != nil {
+			return tickets, err
+		}
+		tickets = append(tickets, createdTicket)
 	}
-
-	_, err := ts.tr.CreateTicket(ticket)
-	if err != nil {
-		return err
-	}
-	return nil
+	return tickets, nil
 }
 
 func (ts *TicketService) GetTicketByID(param model.TicketParam) (entity.Ticket, error) {

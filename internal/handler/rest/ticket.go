@@ -21,19 +21,20 @@ func (r *Rest) GetTicketByID(ctx *gin.Context) {
 	helper.Success(ctx, http.StatusOK, "success get ticket", ticket)
 }
 
-func (r *Rest) CreateTicket(ctx *gin.Context) {
-	param := model.TicketCreate{}
-	err := ctx.ShouldBindJSON(&param)
-	if err != nil {
-		helper.Error(ctx, http.StatusBadRequest, "failed to bind input", err)
+func (r *Rest) BuyTicket(c *gin.Context) {
+	var ticketBuy model.TicketBuy
+	if err := c.BindJSON(&ticketBuy); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	err = r.service.TicketService.CreateTicket(param)
+	tickets, err := r.service.TicketService.BuyTicket(ticketBuy)
 	if err != nil {
-		helper.Error(ctx, http.StatusInternalServerError, "failed to create ticket", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to buy tickets", "details": err.Error()})
 		return
 	}
 
-	helper.Success(ctx, http.StatusCreated, "success create ticket", nil)
+	for _, ticket := range tickets {
+		c.JSON(http.StatusOK, gin.H{"message": "ticket created successfully", "TicketID": ticket.ID})
+	}
 }
