@@ -5,9 +5,9 @@ import (
 )
 
 type Place struct {
-	ID            uint      `json:"id" gorm:"primary_key; unique;"`
+	ID            uint      `json:"id" gorm:"primary_key;unique;not null;"`
 	Name          string    `json:"name" gorm:"type:varchar(100);not null;"`
-	CityID        uint	    `json:"cityid" gorm:";foreignkey:ID;references:cities;onUpdate:CASCADE;onDelete:CASCADE"`
+	CityID        uint	    `json:"cityid" gorm:"foreignkey:ID;references:cities;onUpdate:CASCADE;onDelete:CASCADE"`
 	PlaceDesc     string    `json:"place_desc" gorm:"type:varchar(1200);not null;"`
 	PlaceAddress  string    `json:"place_address" gorm:"type:varchar(120);not null;"`
 	PlaceHistory  string    `json:"place_history" gorm:"type:varchar(3600);not null;"`
@@ -20,6 +20,7 @@ type Place struct {
 	PlaceEvent    string    `json:"place_event" gorm:"type:varchar(2000);not null;"`
 	PlaceAward    string    `json:"place_award" gorm:"type:varchar(1000);not null;"`
 	PlaceImage    string    `json:"place_image" gorm:"type:varchar(500);not null;"`
+	Price         int       `json:"price" gorm:"type:int;not null;"`
 	CreatedAt     time.Time `json:"createdAt" gorm:"autoCreateTime"`
 	UpdatedAt     time.Time `json:"updatedAt" gorm:"autoUpdateTime"`
 	Ticket        []Ticket  `json:"-"`

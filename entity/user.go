@@ -19,4 +19,5 @@ type User struct {
 	Ticket           []Ticket  `json:"-"`
 	Guide			 []Guide   `json:"-"`
 	Payment			 []Payment `json:"-"`
+	Order			 []Order   `json:"-"`
 }
