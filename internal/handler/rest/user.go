@@ -22,10 +22,6 @@ func (r *Rest) Register(ctx *gin.Context) {
 		return
 	}
 
-	if RegisterParam.Password != RegisterParam.ConfirmPassword {
-		helper.Error(ctx, http.StatusBadRequest, "password and confirm password not match", nil)
-		return
-	}
 	err = r.service.UserService.Register(RegisterParam)
 	if err != nil {
 		helper.Error(ctx, http.StatusInternalServerError, "failed to register new user", err)

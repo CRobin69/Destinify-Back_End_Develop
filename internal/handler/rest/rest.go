@@ -63,7 +63,7 @@ func (r *Rest) MountEndpoint() {
 	// v1.GET("/culinary/search", r.SearchCulinary)
 
 	// Ticket
-	v1.POST("/ticket", r.CreateTicket)
+	v1.POST("/ticket", r.BuyTicket)
 	v1.GET("/ticket/:id", r.GetTicketByID)
 
 	port := os.Getenv("PORT")
