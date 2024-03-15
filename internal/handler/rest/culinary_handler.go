@@ -4,9 +4,9 @@ import (
 	"INTERN_BCC/model"
 	"INTERN_BCC/pkg/helper"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 func (r *Rest) CreateCulinary(ctx *gin.Context) {
@@ -28,7 +28,12 @@ func (r *Rest) CreateCulinary(ctx *gin.Context) {
 
 func (r *Rest) GetCulinaryByID(ctx *gin.Context) {
 	id := ctx.Param("id")
-	param := model.CulinaryParam{ID: uuid.MustParse(id)}
+	idUint, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		helper.Error(ctx, http.StatusBadRequest, "invalid id", err)
+		return
+	}
+	param := model.CulinaryParam{ID: uint(idUint)}
 	culinary, err := r.service.CulinaryService.GetCulinaryByID(param)
 	if err != nil {
 		helper.Error(ctx, http.StatusInternalServerError, "failed to get culinary", err)
