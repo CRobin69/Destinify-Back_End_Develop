@@ -3,11 +3,11 @@ package entity
 import (
 	"time"
 
-	"github.com/google/uuid"
+
 )
 
 type Culinary struct {
-	ID                 uuid.UUID  `json:"id" gorm:"type:varchar(6);primary_key;"`
+	ID                 uint  	  `json:"id" gorm:"primary_key"`
 	Name               string     `json:"name" gorm:"type:varchar(36);not null"`
 	CityID             uint       `json:"cityid" gorm:"foreignkey:ID;references:cities;onUpdate:CASCADE;onDelete:CASCADE"`
 	CulinaryDesc       string     `json:"culinary_desc" gorm:"type:varchar(1200);not null;"`
