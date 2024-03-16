@@ -1,8 +1,8 @@
 package rest
 
 import (
-	"INTERN_BCC/pkg/helper"
 	"INTERN_BCC/model"
+	"INTERN_BCC/pkg/helper"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -49,18 +49,18 @@ func (r *Rest) Login(ctx *gin.Context) {
 	helper.Success(ctx, http.StatusOK, "success login to system", token)
 }
 
-// func (r *Rest) UploadPhoto(ctx *gin.Context) {
-// 	photo, err :a= ctx.FormFile("photo")
-// 	if err != nil {
-// 		helper.Error(ctx, http.StatusBadRequest, "failed to bind input", err)
-// 		return
-// 	}
+func (r *Rest) UploadPhoto(ctx *gin.Context) {
+	photo, err := ctx.FormFile("photo")
+	if err != nil {
+		helper.Error(ctx, http.StatusBadRequest, "failed to bind input", err)
+		return
+	}
 
-// 	err = r.service.UserService.UploadPhoto(ctx, model.UserUploadPhoto{Photo: photo})
-// 	if err != nil {
-// 		helper.Error(ctx, http.StatusInternalServerError, "failed to upload photo", err)
-// 		return
-// 	}
+	photoLink, uploadErr := r.service.UserService.UploadPhoto(ctx, model.UploadPhoto{Photo: photo})
+	if uploadErr != nil {
+		helper.Error(ctx, http.StatusInternalServerError, "failed to upload photo", uploadErr)
+		return
+	}
 
-//		response.Success(ctx, http.StatusOK, "success upload photo", nil)
-//	}
+	helper.Success(ctx, http.StatusOK, "success upload photo", photoLink)
+}
