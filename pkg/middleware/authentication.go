@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	
 )
 
 func (m *middleware) AuthenticateUser(ctx *gin.Context) {
@@ -23,8 +22,10 @@ func (m *middleware) AuthenticateUser(ctx *gin.Context) {
 	if err != nil {
 		helper.Error(ctx, http.StatusUnauthorized, "failed validate token", err)
 		ctx.Abort()
+		return
 	}
 
+	ctx.Set("user_id", userId)
 	user, err := m.service.UserService.GetUser(model.UserParam{
 		ID: userId,
 	})
