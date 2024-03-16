@@ -11,6 +11,6 @@ type CityParam struct {
 	Name string `json:"name"`
 }
 
-type CitySearch struct {
+type SearchCity struct {
 	Name string `json:"name"`
 }

@@ -10,7 +10,7 @@ type ICulinaryRepository interface {
 	CreateData(culinary entity.Culinary) (entity.Culinary, error)
 	GetCulinaryByID(param model.CulinaryParam) (entity.Culinary, error)
 	GetAllCulinary(param model.CulinaryParam) ([]entity.Culinary, error)
-	// SearchCulinary (param model.SearchCulinary) ([]entity.Culinary, error)
+	SearchCulinary(param model.SearchCulinary) ([]entity.Culinary, error)
 }
 
 type CulinaryRepository struct {
@@ -50,10 +50,13 @@ func (cr *CulinaryRepository) GetAllCulinary(param model.CulinaryParam) ([]entit
 	return culinary, nil
 }
 
-// func (cr *CulinaryRepository) SearchCulinary(param model.SearchCulinary) ([]entity.Culinary, error) {
-// 	var culinary []entity.Culinary
-// if err := r.db.Where("name LIKE ?", "%"+searchCulinary.Name+"%").Find(&culinary).Error; err != nil {
-// 	return nil, err
-// }
-// return culinary, nil
-// }
+func (cr *CulinaryRepository) SearchCulinary(param model.SearchCulinary) ([]entity.Culinary, error) {
+	var culinary []entity.Culinary
+	if err := cr.db.Where("LOWER(name) LIKE LOWER(?)", "%"+param.Name+"%").Find(&culinary).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return []entity.Culinary{}, nil
+		}
+		return nil, err
+	}
+	return culinary, nil
+}

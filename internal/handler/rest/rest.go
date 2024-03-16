@@ -47,19 +47,21 @@ func (r *Rest) MountEndpoint() {
 	cityGroup.POST("/create-city", r.CreateCity)
 	cityGroup.GET("/get-city/:id", r.GetCity)
 	cityGroup.GET("/get-city/all-of-the-cities", r.GetAllCity)
+	cityGroup.GET("/search-city", r.SearchCity)
 
 	// Place
 	placeGroup := v1.Group("/place")
 	placeGroup.POST("/create-place", r.CreatePlace)
 	placeGroup.GET("/get-place/:id", r.GetPlaceByID)
 	placeGroup.GET("/get-place/all-of-the-places", r.GetAllPlace)
+	placeGroup.GET("/search-place", r.SearchPlace)
 
 	// Culinary
 	CulinaryGroup := v1.Group("/culinary")
 	CulinaryGroup.POST("/create-culinary", r.CreateCulinary)
 	CulinaryGroup.GET("/get-culinary/:id", r.GetCulinaryByID)
 	CulinaryGroup.GET("/get-culinary/all-of-the-culinaries", r.GetAllCulinary)
-	// v1.GET("/culinary/search", r.SearchCulinary)
+	CulinaryGroup.GET("/search-culinary", r.SearchCulinary)
 
 	// Ticket
 	v1.POST("/ticket", r.middleware.AuthenticateUser, r.BuyTicket)

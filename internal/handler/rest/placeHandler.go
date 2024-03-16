@@ -53,3 +53,20 @@ func (r *Rest) GetAllPlace(ctx *gin.Context) {
 
 	helper.Success(ctx, http.StatusOK, "success get all place", places)
 }
+
+func (r *Rest) SearchPlace(ctx *gin.Context) {
+	param := model.SearchPlace{
+		Name: ctx.Query("name"),
+	}
+	places, err := r.service.PlaceService.SearchPlace(param)
+	if err != nil {
+		helper.Error(ctx, http.StatusInternalServerError, "failed to search place", err)
+		return
+	}
+	if len(places) == 0 {
+		helper.Success(ctx, http.StatusNotFound, "no place found", nil)
+		return
+	}
+
+	helper.Success(ctx, http.StatusOK, "success search place", places)
+}

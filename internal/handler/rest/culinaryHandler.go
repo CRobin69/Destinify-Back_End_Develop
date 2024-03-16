@@ -54,13 +54,19 @@ func (r *Rest) GetAllCulinary(ctx *gin.Context) {
 	helper.Success(ctx, http.StatusOK, "success get all culinary", culinary)
 }
 
-// func (r *Rest) SearchCulinary(ctx *gin.Context) {
-// 	param := model.SearchCulinary{}
-// 	culinary, err := r.service.CulinaryService.SearchCulinary(param)
-// 	if err != nil {
-// 		helper.Error(ctx, http.StatusInternalServerError, "failed to search culinary", err)
-// 		return
-// 	}
-//
-// 	helper.Success(ctx, http.StatusOK, "success search culinary", culinary)
-// }
+func (r *Rest) SearchCulinary(ctx *gin.Context) {
+	param := model.SearchCulinary{
+		Name: ctx.Query("name"),
+	}
+	culinary, err := r.service.CulinaryService.SearchCulinary(param)
+	if err != nil {
+		helper.Error(ctx, http.StatusInternalServerError, "failed to search culinary", err)
+		return
+	}
+	if len(culinary) == 0 {
+		helper.Success(ctx, http.StatusNotFound, "no culinary place found", nil)
+		return
+	}
+
+	helper.Success(ctx, http.StatusOK, "success search culinary", culinary)
+}

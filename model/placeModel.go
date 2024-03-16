@@ -24,3 +24,7 @@ type PlaceParam struct{
 	Name 	string  	`json:"-"`
 	CityID 	uint  		`json:"-"`
 }
+
+type SearchPlace struct {
+	Name string `json:"name"`
+}

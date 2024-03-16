@@ -52,3 +52,20 @@ func (r *Rest) GetAllCity(ctx *gin.Context) {
 
 	helper.Success(ctx, http.StatusOK, "success get all city", cities)
 }
+
+func (r *Rest) SearchCity(ctx *gin.Context) {
+	param := model.SearchCity{
+		Name: ctx.Query("name"),
+	}
+	cities, err := r.service.CityService.SearchCity(param)
+	if err != nil {
+		helper.Error(ctx, http.StatusInternalServerError, "failed to search city", err)
+		return
+	}
+	if len(cities) == 0 {
+		helper.Success(ctx, http.StatusOK, "no city found", nil)
+		return
+	}
+
+	helper.Success(ctx, http.StatusOK, "success search city", cities)
+}

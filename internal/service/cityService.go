@@ -10,6 +10,7 @@ type ICityService interface {
 	CreateCity(param model.CityCreate) error
 	GetCity(param model.CityParam) (entity.City, error)
 	GetAllCity(param model.CityParam) ([]entity.City, error)
+	SearchCity (param model.SearchCity) ([]entity.City, error)
 }
 
 type CityService struct {
@@ -39,4 +40,8 @@ func (cs *CityService) GetCity(param model.CityParam) (entity.City, error) {
 
 func (cs *CityService) GetAllCity(param model.CityParam) ([]entity.City, error) {
 	return cs.c.GetAllCity(param)
+}
+
+func (cs *CityService) SearchCity(param model.SearchCity) ([]entity.City, error) {
+	return cs.c.SearchCity(param)
 }
