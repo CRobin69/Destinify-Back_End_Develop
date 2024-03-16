@@ -32,20 +32,19 @@ func (r *Rest) MountEndpoint() {
 	r.router.Use(r.middleware.Timeout())
 
 	v1 := r.router.Group("/api/v1")
-
 	v1.GET("/health-check", healthCheck)
-
 	v1.GET("/time-out", testTimeout)
 
-	v1.GET("/login-user", r.middleware.AuthenticateUser, getLoginUser)
-
-	v1.POST("/register", r.Register)
-	v1.POST("/login", r.Login)
-
-	// user.POST("/profile/upload", r.middleware.AuthenticateUser, r.UploadPhoto)
+	// User
+	userGroup := v1.Group("/user")
+	userGroup.GET("/me", r.middleware.AuthenticateUser, getLoginUser)
+	userGroup.POST("/register", r.Register)
+	userGroup.POST("/login", r.Login)
+	userGroup.POST("/profile/upload", r.middleware.AuthenticateUser, r.UploadPhoto)
 
 	// City
 	cityGroup := v1.Group("/city")
+	cityGroup.POST("/create-city", r.CreateCity)
 	cityGroup.GET("/get-city/:id", r.GetCity)
 	cityGroup.GET("/get-city/all-of-the-cities", r.GetAllCity)
 
@@ -63,7 +62,7 @@ func (r *Rest) MountEndpoint() {
 	// v1.GET("/culinary/search", r.SearchCulinary)
 
 	// Ticket
-	v1.POST("/ticket", r.BuyTicket)
+	v1.POST("/ticket", r.middleware.AuthenticateUser, r.BuyTicket)
 	v1.GET("/ticket/:id", r.GetTicketByID)
 
 	// Guide
