@@ -27,7 +27,6 @@ func (tr *TicketRepository) BuyTicket(ticket entity.Ticket) (entity.Ticket, erro
 	return ticket, nil
 }
 
-
 func (tr *TicketRepository) GetTicketByID(param model.TicketParam) (entity.Ticket, error) {
 	ticket := entity.Ticket{}
 	err := tr.db.Debug().Where(&param).First(&ticket).Error

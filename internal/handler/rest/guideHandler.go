@@ -26,7 +26,7 @@ func (r *Rest) CreateGuide(ctx *gin.Context) {
 	helper.Success(ctx, http.StatusCreated, "success create guide", nil)
 }
 
-func (r *Rest)PatchGuide(ctx *gin.Context) {
+func (r *Rest) PatchGuide(ctx *gin.Context) {
 	param := model.GuidePatch{}
 	err := ctx.ShouldBindJSON(&param)
 	if err != nil {

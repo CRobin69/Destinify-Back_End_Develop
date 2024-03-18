@@ -28,27 +28,22 @@ func (r *Rest) BuyTicket(ctx *gin.Context) {
 		return
 	}
 
-	// Extract the userID from the context
 	userID, exists := ctx.Get("user_id")
 	if !exists {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found"})
 		return
 	}
 
-	// userID is an interface{}, so you'll need to cast it to its original type
 	realUserID := userID.(uuid.UUID)
 
-	// Update the UserID field in the ticketBuy model
 	ticketBuy.UserID = realUserID
 
-	// Call the BuyTicket function in the TicketService
 	tickets, err := r.service.TicketService.BuyTicket(ticketBuy)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to buy tickets", "details": err.Error()})
 		return
 	}
 
-	// Create a slice to hold the ticket IDs
 	var ticketIDs []uuid.UUID
 	for _, ticket := range tickets {
 		ticketIDs = append(ticketIDs,ticket.ID)

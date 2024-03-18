@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type Payment struct {
+type Transaction struct {
 	ID            uuid.UUID `json:"id" gorm:"type:varchar(36);primary_key;unique;not null;"`
 	OrderID       uuid.UUID `json:"orderid" gorm:"type:varchar(36);foreignkey:ID;references:orders;onUpdate:CASCADE;onDelete:CASCADE"`
 	Amount        int       `json:"total" gorm:"type:int;not null;"`
