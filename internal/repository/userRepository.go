@@ -12,6 +12,7 @@ type IUserRepository interface {
 	GetUser(param model.UserParam) (entity.User, error)
 	UpdateUser(user entity.User, param model.UserParam) error
 	UpdatePhoto(param model.UploadPhoto) error
+	UpdatePassword(param model.UpdatePassword) error
 }
 
 type UserRepository struct {
@@ -42,7 +43,7 @@ func (ur *UserRepository) GetUser(param model.UserParam) (entity.User, error) {
 }
 
 func (ur *UserRepository) UpdateUser(user entity.User, param model.UserParam) error {
-	err := ur.db.Debug().Model(&entity.User{}).Where(param).Updates(&user).Error
+	err := ur.db.Debug().Model(&entity.User{}).Where(param.ID).Updates(&user).Error
 	if err != nil {
 		return err
 	}
@@ -52,6 +53,14 @@ func (ur *UserRepository) UpdateUser(user entity.User, param model.UserParam) er
 
 func (ur *UserRepository) UpdatePhoto(param model.UploadPhoto) error {
 	err := ur.db.Model(&entity.User{}).Where("id = ?", param.ID).Update("profile_photo_link", param.PhotoLink).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (ur *UserRepository) UpdatePassword(param model.UpdatePassword) error {
+	err := ur.db.Model(&entity.User{}).Where("id = ?", param.ID).Update("password", param.NewPassword).Error
 	if err != nil {
 		return err
 	}

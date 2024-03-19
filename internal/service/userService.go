@@ -16,6 +16,8 @@ type IUserService interface {
 	GetUser(param model.UserParam) (entity.User, error)
 	Login(param model.UserLogin) (model.UserLoginResponse, error)
 	UploadPhoto(ctx *gin.Context, param model.UploadPhoto) (string, error)
+	UpdateUser(ctx *gin.Context, param model.UpdateUser) (string, error)
+	UpdatePassword(ctx *gin.Context, param model.UpdatePassword) (string, error)
 }
 
 type UserService struct {
@@ -26,7 +28,6 @@ func NewUserService(userRepository repository.IUserRepository) IUserService {
 	return &UserService{
 		ur: userRepository,
 	}
-	// supabase: supabase,
 
 }
 
@@ -113,4 +114,56 @@ func (u *UserService) UploadPhoto(ctx *gin.Context, param model.UploadPhoto) (st
 	}
 
 	return link, nil
+}
+
+func (u *UserService) UpdateUser(ctx *gin.Context, param model.UpdateUser) (string, error) {
+	user, err := helper.GetLoginUser(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	if param.HP != "" {
+		user.HP = param.HP
+	}
+	if param.Name != "" {
+		user.Name = param.Name
+	}
+
+	err = u.ur.UpdateUser(user, model.UserParam{
+		ID: user.ID,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return "", nil
+}
+
+func (u *UserService) UpdatePassword(ctx *gin.Context, param model.UpdatePassword) (string, error) {
+	user, err := helper.GetLoginUser(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	err = helper.ComparePassword(user.Password, param.OldPassword)
+	if err != nil {
+		return "", err
+	}
+
+	hashPassword, err := helper.HashPassword(param.NewPassword)
+	if err != nil {
+		return "", err
+	}
+
+	err = u.ur.UpdatePassword(model.UpdatePassword{
+		ID:              user.ID,
+		OldPassword:     param.OldPassword,
+		NewPassword:     hashPassword,
+		ConfirmPassword: param.ConfirmPassword,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return "", nil
 }

@@ -64,3 +64,38 @@ func (r *Rest) UploadPhoto(ctx *gin.Context) {
 
 	helper.Success(ctx, http.StatusOK, "success upload photo", photoLink)
 }
+
+func (r *Rest) UpdateUser(ctx *gin.Context) {
+	param := model.UpdateUser{}
+
+	err := ctx.ShouldBindJSON(&param)
+	if err != nil {
+		helper.Error(ctx, http.StatusBadRequest, "failed to bind input", err)
+		return
+	}
+	_,err = r.service.UserService.UpdateUser(ctx, param)
+	if err != nil {
+		helper.Error(ctx, http.StatusInternalServerError, "failed to update user", err)
+		return
+	}
+
+	helper.Success(ctx, http.StatusOK, "success update user", nil)
+}
+
+func (r *Rest) UpdatePassword(ctx *gin.Context) {
+	param := model.UpdatePassword{}
+
+	err := ctx.ShouldBindJSON(&param)
+	if err != nil {
+		helper.Error(ctx, http.StatusBadRequest, "failed to bind input", err)
+		return
+	}
+
+	_,err = r.service.UserService.UpdatePassword(ctx, param)
+	if err != nil {
+		helper.Error(ctx, http.StatusInternalServerError, "failed to update password", err)
+		return
+	}
+
+	helper.Success(ctx, http.StatusOK, "success update password", nil)
+}

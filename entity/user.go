@@ -13,7 +13,7 @@ type User struct {
 	Email           string        `json:"email" gorm:"type:varchar(255);not null;unique"`
 	Password        string        `json:"password" gorm:"type:varchar(255);not null;"`
 	ConfirmPassword string        `json:"confirm_password" gorm:"-"`
-	PhotoLink       string        `json:"-" gorm:"type:varchar(200)"`
+	PhotoLink       string        `json:"-" gorm:"type:varchar(500)"`
 	CreatedAt       time.Time     `json:"createdAt" gorm:"autoCreateTime"`
 	UpdatedAt       time.Time     `json:"updatedAt" gorm:"autoUpdateTime"`
 	Ticket          []Ticket      `json:"-"`
