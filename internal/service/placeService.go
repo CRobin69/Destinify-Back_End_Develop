@@ -10,7 +10,8 @@ type IPlaceService interface {
 	CreateData(param model.PlaceCreate) (error)
 	GetPlaceByID(param model.PlaceParam) (entity.Place, error)
 	GetAllPlace(param model.PlaceParam) ([]entity.Place, error)
-	SearchPlace (param model.SearchPlace) ([]entity.Place, error)
+	SearchPlace(param model.SearchPlace) ([]entity.Place, error)
+	GetPlaceByCityID(param model.PlaceParam) ([]entity.Place, error)
 }
 
 type PlaceService struct {
@@ -59,4 +60,8 @@ func (ps *PlaceService) GetAllPlace(param model.PlaceParam) ([]entity.Place, err
 
 func (ps *PlaceService) SearchPlace(param model.SearchPlace) ([]entity.Place, error) {
 	return ps.pr.SearchPlace(param)
+}
+
+func (ps *PlaceService) GetPlaceByCityID(param model.PlaceParam) ([]entity.Place, error) {
+	return ps.pr.GetPlaceByCityID(param)
 }

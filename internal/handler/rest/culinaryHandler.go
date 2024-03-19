@@ -70,3 +70,20 @@ func (r *Rest) SearchCulinary(ctx *gin.Context) {
 
 	helper.Success(ctx, http.StatusOK, "success search culinary", culinary)
 }
+
+func (r *Rest) GetCulinaryByCityID(ctx *gin.Context) {
+	id := ctx.Param("id")
+	idUint, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		helper.Error(ctx, http.StatusBadRequest, "invalid id", err)
+		return
+	}
+	param := model.CulinaryParam{CityID: uint(idUint)}
+	culinary, err := r.service.CulinaryService.GetCulinaryByCityID(param)
+	if err != nil {
+		helper.Error(ctx, http.StatusInternalServerError, "failed to get culinary by city id", err)
+		return
+	}
+
+	helper.Success(ctx, http.StatusOK, "success get culinary by city id", culinary)
+}

@@ -11,6 +11,7 @@ type ICulinaryService interface {
 	GetCulinaryByID(param model.CulinaryParam) (entity.Culinary, error)
 	GetAllCulinary(param model.CulinaryParam) ([]entity.Culinary, error)
 	SearchCulinary(param model.SearchCulinary) ([]entity.Culinary, error)
+	GetCulinaryByCityID(param model.CulinaryParam) ([]entity.Culinary, error)
 }
 
 type CulinarService struct {
@@ -54,4 +55,8 @@ func (cs *CulinarService) GetAllCulinary(param model.CulinaryParam) ([]entity.Cu
 
 func (cs *CulinarService) SearchCulinary(param model.SearchCulinary) ([]entity.Culinary, error) {
 	return cs.cr.SearchCulinary(param)
+}
+
+func (cs *CulinarService) GetCulinaryByCityID(param model.CulinaryParam) ([]entity.Culinary, error) {
+	return cs.cr.GetCulinaryByCityID(param)
 }

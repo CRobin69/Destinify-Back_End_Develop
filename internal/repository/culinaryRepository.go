@@ -11,6 +11,7 @@ type ICulinaryRepository interface {
 	GetCulinaryByID(param model.CulinaryParam) (entity.Culinary, error)
 	GetAllCulinary(param model.CulinaryParam) ([]entity.Culinary, error)
 	SearchCulinary(param model.SearchCulinary) ([]entity.Culinary, error)
+	GetCulinaryByCityID(param model.CulinaryParam) ([]entity.Culinary, error)
 }
 
 type CulinaryRepository struct {
@@ -58,5 +59,15 @@ func (cr *CulinaryRepository) SearchCulinary(param model.SearchCulinary) ([]enti
 		}
 		return nil, err
 	}
+	return culinary, nil
+}
+
+func (cr *CulinaryRepository) GetCulinaryByCityID(param model.CulinaryParam) ([]entity.Culinary, error) {
+	var culinary []entity.Culinary
+	err := cr.db.Debug().Where(&param).Find(&culinary).Error
+	if err != nil {
+		return culinary, err
+	}
+
 	return culinary, nil
 }

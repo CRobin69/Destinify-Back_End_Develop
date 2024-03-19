@@ -70,3 +70,20 @@ func (r *Rest) SearchPlace(ctx *gin.Context) {
 
 	helper.Success(ctx, http.StatusOK, "success search place", places)
 }
+
+func (r *Rest) GetPlaceByCityID(ctx *gin.Context) {
+	id := ctx.Param("id")
+	idUint, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		helper.Error(ctx, http.StatusBadRequest, "invalid id", err)
+		return
+	}
+	param := model.PlaceParam{CityID: uint(idUint)}
+	places, err := r.service.PlaceService.GetPlaceByCityID(param)
+	if err != nil {
+		helper.Error(ctx, http.StatusInternalServerError, "failed to get place by city id", err)
+		return
+	}
+
+	helper.Success(ctx, http.StatusOK, "success get place by city id", places)
+}

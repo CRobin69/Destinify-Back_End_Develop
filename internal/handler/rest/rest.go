@@ -41,6 +41,7 @@ func (r *Rest) MountEndpoint() {
 	userGroup.POST("/register", r.Register)
 	userGroup.POST("/login", r.Login)
 	userGroup.POST("/profile/upload", r.middleware.AuthenticateUser, r.UploadPhoto)
+	userGroup.PATCH("/profile/update", r.middleware.AuthenticateUser, r.UpdateUser)
 
 	// City
 	cityGroup := v1.Group("/city")
@@ -55,6 +56,7 @@ func (r *Rest) MountEndpoint() {
 	placeGroup.GET("/get-place/:id", r.GetPlaceByID)
 	placeGroup.GET("/get-place/all-of-the-places", r.GetAllPlace)
 	placeGroup.GET("/search-place", r.SearchPlace)
+	placeGroup.GET("/get-place/city/:id", r.GetPlaceByCityID)
 
 	// Culinary
 	CulinaryGroup := v1.Group("/culinary")
@@ -62,6 +64,7 @@ func (r *Rest) MountEndpoint() {
 	CulinaryGroup.GET("/get-culinary/:id", r.GetCulinaryByID)
 	CulinaryGroup.GET("/get-culinary/all-of-the-culinaries", r.GetAllCulinary)
 	CulinaryGroup.GET("/search-culinary", r.SearchCulinary)
+	CulinaryGroup.GET("/get-culinary/city/:id", r.GetCulinaryByCityID)
 
 	// Ticket
 	v1.POST("/ticket", r.middleware.AuthenticateUser, r.BuyTicket)

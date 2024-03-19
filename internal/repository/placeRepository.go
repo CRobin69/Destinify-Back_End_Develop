@@ -11,7 +11,8 @@ type IPlaceRepository interface {
 	CreateData(place entity.Place) (entity.Place, error)
 	GetPlaceByID(param model.PlaceParam) (entity.Place, error)
 	GetAllPlace(param model.PlaceParam) ([]entity.Place, error)
-	SearchPlace (param model.SearchPlace) ([]entity.Place, error)
+	SearchPlace(param model.SearchPlace) ([]entity.Place, error)
+	GetPlaceByCityID(param model.PlaceParam) ([]entity.Place, error)
 }
 
 type PlaceRepository struct {
@@ -60,5 +61,14 @@ func (pr *PlaceRepository) SearchPlace(param model.SearchPlace) ([]entity.Place,
 		return nil, err
 	}
 
+	return place, nil
+}
+
+func (pr *PlaceRepository) GetPlaceByCityID(param model.PlaceParam) ([]entity.Place, error) {
+	var place []entity.Place
+	err := pr.db.Debug().Where(&param).Find(&place).Error
+	if err != nil {
+		return place, err
+	}
 	return place, nil
 }
