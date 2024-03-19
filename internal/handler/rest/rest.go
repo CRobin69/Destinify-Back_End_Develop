@@ -41,7 +41,8 @@ func (r *Rest) MountEndpoint() {
 	userGroup.POST("/register", r.Register)
 	userGroup.POST("/login", r.Login)
 	userGroup.POST("/profile/upload", r.middleware.AuthenticateUser, r.UploadPhoto)
-	userGroup.PATCH("/profile/update", r.middleware.AuthenticateUser, r.UpdateUser)
+	userGroup.PATCH("/profile/update-info", r.middleware.AuthenticateUser, r.UpdateUser)
+	userGroup.PATCH("/profile/update-password", r.middleware.AuthenticateUser, r.UpdatePassword)
 
 	// City
 	cityGroup := v1.Group("/city")
