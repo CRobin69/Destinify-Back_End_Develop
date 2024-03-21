@@ -12,6 +12,7 @@ type IGuideService interface {
 	GetGuideByID(param model.GuideParam) (entity.Guide, error)
 	GetAllGuide(param model.GuideParam) ([]entity.Guide, error)
 	PatchGuide(param model.GuidePatch) error
+	BookGuideByID(param model.GuideBook) (entity.Guide, error)
 }
 
 type GuideService struct {
@@ -28,7 +29,6 @@ func (gs *GuideService) CreateGuide(param model.CreateGuide) error {
 	guide := entity.Guide{
 		ID:           param.ID,
 		PlaceID:      param.PlaceID,
-		UserID:       param.UserID,
 		Name:         param.Name,
 		GuideDesc:    param.GuideDesc,
 		GuidePrice:   param.GuidePrice,
@@ -76,10 +76,21 @@ func (gs *GuideService) PatchGuide(param model.GuidePatch) error {
 	if param.GuideContact != "" {
 		existingGuide.GuideContact = param.GuideContact
 	}
+	
 
 	return gs.gr.PatchGuide(existingGuide)
 }
 
 func (gs *GuideService) GetGuideByID(param model.GuideParam) (entity.Guide, error) {
-	return gs.gr.GetGuideByID(param)
+	return gs.gr.GetGuideByID(param.ID)
+}
+
+func (gs *GuideService) BookGuideByID(param model.GuideBook) (entity.Guide, error) {
+	guider, err := gs.gr.GuidePatchID(param.ID)
+	if err != nil {
+		return guider, err
+	}
+
+	guider.Booked = true
+	return guider, gs.gr.PatchGuide(guider)
 }

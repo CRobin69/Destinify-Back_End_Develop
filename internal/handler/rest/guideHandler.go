@@ -16,7 +16,6 @@ func (r *Rest) CreateGuide(ctx *gin.Context) {
 		helper.Error(ctx, http.StatusBadRequest, "failed to bind input", err)
 		return
 	}
-
 	err = r.service.GuideService.CreateGuide(param)
 	if err != nil {
 		helper.Error(ctx, http.StatusInternalServerError, "failed to create guide", err)
@@ -33,7 +32,6 @@ func (r *Rest) PatchGuide(ctx *gin.Context) {
 		helper.Error(ctx, http.StatusBadRequest, "failed to bind input", err)
 		return
 	}
-
 	err = r.service.GuideService.PatchGuide(param)
 	if err != nil {
 		helper.Error(ctx, http.StatusInternalServerError, "failed to update guide", err)
@@ -69,4 +67,28 @@ func (r *Rest) GetGuideByID(ctx *gin.Context) {
 	}
 
 	helper.Success(ctx, http.StatusOK, "success get guide", guide)
+}
+
+func (r *Rest) BookGuide(ctx *gin.Context) {
+	var param model.GuideBook
+	if err := ctx.ShouldBindJSON(&param); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	userID, err := helper.GetLoginUser(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "User authentication failed"})
+		return
+	}
+
+	param.UserID = userID.ID
+
+	guide, err := r.service.GuideService.BookGuideByID(param)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to book guide", "details": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Guide booked successfully", "Guide": guide})
 }
