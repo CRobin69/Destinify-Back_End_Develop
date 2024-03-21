@@ -7,13 +7,15 @@ import (
 )
 
 type Transaction struct {
-	ID            uuid.UUID `json:"id" gorm:"type:varchar(36);primary_key;unique;not null;"`
-	OrderID       uuid.UUID `json:"orderid" gorm:"type:varchar(36);foreignkey:ID;references:orders;onUpdate:CASCADE;onDelete:CASCADE"`
-	Amount        int       `json:"total" gorm:"type:int;not null;"`
-	PaymentDate   time.Time `json:"date" gorm:"autoCreateTime;not null;"`
+	ID            uint      `json:"id" gorm:"type:primary_key;unique;not null;"`
 	UserID        uuid.UUID `json:"userid" gorm:"type:varchar(36);foreignkey:ID;references:users;onUpdate:CASCADE;onDelete:CASCADE"`
-	TransactionID uuid.UUID `json:"transactionid" gorm:"type:varchar(36);unique;"`
-	IsPaid        bool      `json:"isPaid" gorm:"default:false"`
+	OrderID       uuid.UUID `json:"orderid" gorm:"type:varchar(36);foreignkey:ID;references:orders;onUpdate:CASCADE;onDelete:CASCADE"`
+	TransactionID string    `json:"transactionid" gorm:"type:varchar(100);unique;"`
+	PlaceID       uint      `json:"placeid" gorm:"foreignkey:ID;references:places;onUpdate:CASCADE;onDelete:CASCADE"`
+	Amount        int       `json:"total" gorm:"type:int;not null;"`
+	Method        string    `json:"method" gorm:"type:varchar(100);not null;"`
+	VANumber      string    `json:"va_number" gorm:"type:varchar(100);"`
+	Status        string    `json:"status" gorm:"type:varchar(100);not null;"`
 	CreatedAt     time.Time `json:"createdAt" gorm:"autoCreateTime"`
 	UpdatedAt     time.Time `json:"updatedAt" gorm:"autoUpdateTime"`
 }
