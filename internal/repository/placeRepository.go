@@ -9,7 +9,7 @@ import (
 
 type IPlaceRepository interface {
 	CreateData(place entity.Place) (entity.Place, error)
-	GetPlaceByID(param model.PlaceParam) (entity.Place, error)
+	GetPlaceByID(id uint) (entity.Place, error)
 	GetAllPlace(param model.PlaceParam) ([]entity.Place, error)
 	SearchPlace(param model.SearchPlace) ([]entity.Place, error)
 	GetPlaceByCityID(param model.PlaceParam) ([]entity.Place, error)
@@ -32,9 +32,9 @@ func (pr *PlaceRepository) CreateData(place entity.Place) (entity.Place, error) 
 	return place, nil
 }
 
-func (pr *PlaceRepository) GetPlaceByID(param model.PlaceParam) (entity.Place, error) {
+func (pr *PlaceRepository) GetPlaceByID(id uint) (entity.Place, error) {
 	place := entity.Place{}
-	err := pr.db.Debug().Where(&param).First(&place).Error
+	err := pr.db.Debug().Where(&id).First(&place).Error
 	if err != nil {
 		return place, err
 	}

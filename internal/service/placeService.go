@@ -51,7 +51,7 @@ func (ps *PlaceService) CreateData(param model.PlaceCreate) (error) {
 }
 
 func (ps *PlaceService) GetPlaceByID(param model.PlaceParam) (entity.Place, error) {
-	return ps.pr.GetPlaceByID(param)
+	return ps.pr.GetPlaceByID(param.ID)
 }
 
 func (ps *PlaceService) GetAllPlace(param model.PlaceParam) ([]entity.Place, error) {

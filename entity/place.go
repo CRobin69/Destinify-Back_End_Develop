@@ -21,8 +21,8 @@ type Place struct {
 	PlaceAward    string    `json:"place_award" gorm:"type:varchar(1000);not null;"`
 	PlaceImage    string    `json:"place_image" gorm:"type:varchar(500);not null;"`
 	Price         int       `json:"price" gorm:"type:int;"`
-	CreatedAt     time.Time `json:"createdAt" gorm:"autoCreateTime"`
-	UpdatedAt     time.Time `json:"updatedAt" gorm:"autoUpdateTime"`
 	Ticket        []Ticket  `json:"-"`
 	Guide         []Guide   `json:"-"`
+	CreatedAt     time.Time `json:"createdAt" gorm:"autoCreateTime"`
+	UpdatedAt     time.Time `json:"updatedAt" gorm:"autoUpdateTime"`
 }
