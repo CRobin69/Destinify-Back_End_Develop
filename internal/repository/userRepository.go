@@ -4,6 +4,7 @@ import (
 	"INTERN_BCC/entity"
 	"INTERN_BCC/model"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -13,6 +14,7 @@ type IUserRepository interface {
 	UpdateUser(user entity.User, param model.UserParam) error
 	UpdatePhoto(param model.UploadPhoto) error
 	UpdatePassword(param model.UpdatePassword) error
+	FindByID(id uuid.UUID) (entity.User, error)
 }
 
 type UserRepository struct {
@@ -65,4 +67,14 @@ func (ur *UserRepository) UpdatePassword(param model.UpdatePassword) error {
 		return err
 	}
 	return nil
+}
+
+func (ur *UserRepository) FindByID(id uuid.UUID) (entity.User, error) {
+	user := entity.User{}
+	err := ur.db.Debug().Where("id = ?", id).First(&user).Error
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
 }

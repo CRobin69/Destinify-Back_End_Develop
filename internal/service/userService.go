@@ -7,7 +7,6 @@ import (
 	"INTERN_BCC/pkg/helper"
 	"INTERN_BCC/pkg/supabase"
 
-	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
@@ -15,9 +14,10 @@ type IUserService interface {
 	Register(param model.UserRegister) error
 	GetUser(param model.UserParam) (entity.User, error)
 	Login(param model.UserLogin) (model.UserLoginResponse, error)
-	UploadPhoto(ctx *gin.Context, param model.UploadPhoto) (string, error)
-	UpdateUser(ctx *gin.Context, param model.UpdateUser) (string, error)
-	UpdatePassword(ctx *gin.Context, param model.UpdatePassword) (string, error)
+	UploadPhoto(param model.UploadPhoto) (string, error)
+	UpdateUser(id uuid.UUID) (string, error)
+	UpdatePassword(param model.UpdatePassword) (string, error)
+	FindByID(id uuid.UUID) (entity.User, error)
 }
 
 type UserService struct {
@@ -81,15 +81,18 @@ func (u *UserService) Login(param model.UserLogin) (model.UserLoginResponse, err
 }
 
 func (u *UserService) GetUser(param model.UserParam) (entity.User, error) {
+
 	return u.ur.GetUser(param)
 }
 
-func (u *UserService) UploadPhoto(ctx *gin.Context, param model.UploadPhoto) (string, error) {
-	user, err := helper.GetLoginUser(ctx)
-	if err != nil {
-		return "", err
+func (u *UserService) UploadPhoto(param model.UploadPhoto) (string, error) {
+	paramUser := model.UserParam{}
+	paramUser.ID = param.ID
+	user, err := u.ur.GetUser(paramUser)
+	if err != nil{
+		return "", nil
 	}
-
+	
 	supabaseStorage := supabase.NewSupabaseStorage()
 
 	if user.PhotoLink != "" {
@@ -116,22 +119,23 @@ func (u *UserService) UploadPhoto(ctx *gin.Context, param model.UploadPhoto) (st
 	return link, nil
 }
 
-func (u *UserService) UpdateUser(ctx *gin.Context, param model.UpdateUser) (string, error) {
-	user, err := helper.GetLoginUser(ctx)
+func (u *UserService) UpdateUser(id uuid.UUID) (string, error) {
+	param := model.UserParam{}
+	param.ID = id
+	user, err := u.ur.GetUser(param)
 	if err != nil {
 		return "", err
 	}
+	paramUpdate := model.UpdateUser{}
 
-	if param.HP != "" {
-		user.HP = param.HP
+	if paramUpdate.HP != "" {
+		user.HP = paramUpdate.HP
 	}
-	if param.Name != "" {
-		user.Name = param.Name
+	if paramUpdate.Name != "" {
+		user.Name = paramUpdate.Name
 	}
 
-	err = u.ur.UpdateUser(user, model.UserParam{
-		ID: user.ID,
-	})
+	err = u.ur.UpdateUser(user, param)
 	if err != nil {
 		return "", err
 	}
@@ -139,12 +143,14 @@ func (u *UserService) UpdateUser(ctx *gin.Context, param model.UpdateUser) (stri
 	return "", nil
 }
 
-func (u *UserService) UpdatePassword(ctx *gin.Context, param model.UpdatePassword) (string, error) {
-	user, err := helper.GetLoginUser(ctx)
+func (u *UserService) UpdatePassword(param model.UpdatePassword) (string, error) {
+	paramUser := model.UserParam{
+		ID: param.ID,
+	}
+	user, err := u.ur.GetUser(paramUser)
 	if err != nil {
 		return "", err
 	}
-
 	err = helper.ComparePassword(user.Password, param.OldPassword)
 	if err != nil {
 		return "", err
@@ -166,4 +172,12 @@ func (u *UserService) UpdatePassword(ctx *gin.Context, param model.UpdatePasswor
 	}
 
 	return "", nil
+}
+
+func (u *UserService) FindByID(id uuid.UUID) (entity.User, error) {
+	user, err := u.ur.FindByID(id)
+	if err != nil {
+		return user, err
+	}
+	return user, nil
 }
