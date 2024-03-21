@@ -34,11 +34,15 @@ func (r *Rest) BuyTicket(ctx *gin.Context) {
 		return
 	}
 
-	realUserID := userID.(uuid.UUID)
+	realUserID, ok := userID.(uuid.UUID)
+	if !ok {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
+		return
+	}
 
 	ticketBuy.UserID = realUserID
 
-	tickets, err := r.service.TicketService.BuyTicket(ticketBuy)
+	order, tickets, err := r.service.TicketService.BuyTickets(ticketBuy)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to buy tickets", "details": err.Error()})
 		return
@@ -46,7 +50,12 @@ func (r *Rest) BuyTicket(ctx *gin.Context) {
 
 	var ticketIDs []uuid.UUID
 	for _, ticket := range tickets {
-		ticketIDs = append(ticketIDs,ticket.ID)
+		ticketIDs = append(ticketIDs, ticket.ID)
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": "Tickets created successfully", "TicketIDs": ticketIDs})
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Tickets created successfully", 
+		"OrderID": order.ID,
+		"TotalPrice": order.TotalPrice,
+		"TicketIDs": ticketIDs})
 }

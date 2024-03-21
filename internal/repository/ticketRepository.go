@@ -4,12 +4,15 @@ import (
 	"INTERN_BCC/entity"
 	"INTERN_BCC/model"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type ITicketRepository interface {
-	BuyTicket(ticket entity.Ticket) (entity.Ticket, error)
+	BuyTicket(tickets entity.Ticket) (entity.Ticket, error)
 	GetTicketByID(param model.TicketParam) (entity.Ticket, error)
+	GetTicketByUserID(param model.TicketParam) ([]entity.Ticket, error)
+	GetTicketByOrderID(orderID uuid.UUID) (entity.Ticket, error)
 }
 
 type TicketRepository struct {
@@ -21,9 +24,12 @@ func NewTicketRepository(db *gorm.DB) ITicketRepository {
 }
 
 func (tr *TicketRepository) BuyTicket(ticket entity.Ticket) (entity.Ticket, error) {
-	if err := tr.db.Create(&ticket).Error; err != nil {
-		return ticket, err
+	tx := tr.db.Begin()
+	if err := tx.Create(&ticket).Error; err != nil {
+		tx.Rollback()
+		return entity.Ticket{}, err
 	}
+	tx.Commit()
 	return ticket, nil
 }
 
@@ -31,7 +37,25 @@ func (tr *TicketRepository) GetTicketByID(param model.TicketParam) (entity.Ticke
 	ticket := entity.Ticket{}
 	err := tr.db.Debug().Where(&param).First(&ticket).Error
 	if err != nil {
-		return ticket, err
+		return entity.Ticket{}, err
+	}
+	return ticket, nil
+}
+
+func (tr *TicketRepository) GetTicketByUserID(param model.TicketParam) ([]entity.Ticket, error) {
+	var tickets []entity.Ticket
+	err := tr.db.Debug().Where(&param).Find(&tickets).Error
+	if err != nil {
+		return []entity.Ticket{}, err
+	}
+	return tickets, nil
+}
+
+func (tr *TicketRepository) GetTicketByOrderID(orderID uuid.UUID) (entity.Ticket, error) {
+	ticket := entity.Ticket{}
+	err := tr.db.Debug().Where("order_id = ?", orderID).First(&ticket).Error
+	if err != nil {
+		return entity.Ticket{}, err
 	}
 	return ticket, nil
 }
