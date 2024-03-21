@@ -7,7 +7,7 @@ import (
 type Place struct {
 	ID            uint      `json:"id" gorm:"primary_key;unique;not null;"`
 	Name          string    `json:"name" gorm:"type:varchar(100);not null;"`
-	CityID        uint	    `json:"cityid" gorm:"foreignkey:ID;references:cities;onUpdate:CASCADE;onDelete:CASCADE"`
+	CityID        uint      `json:"cityid" gorm:"foreignkey:ID;references:cities;onUpdate:CASCADE;onDelete:CASCADE"`
 	PlaceDesc     string    `json:"place_desc" gorm:"type:varchar(1200);not null;"`
 	PlaceAddress  string    `json:"place_address" gorm:"type:varchar(120);not null;"`
 	PlaceHistory  string    `json:"place_history" gorm:"type:varchar(3600);not null;"`
@@ -23,6 +23,7 @@ type Place struct {
 	Price         int       `json:"price" gorm:"type:int;"`
 	Ticket        []Ticket  `json:"-"`
 	Guide         []Guide   `json:"-"`
+	Comment       []Comment `json:"-"`
 	CreatedAt     time.Time `json:"createdAt" gorm:"autoCreateTime"`
 	UpdatedAt     time.Time `json:"updatedAt" gorm:"autoUpdateTime"`
 }

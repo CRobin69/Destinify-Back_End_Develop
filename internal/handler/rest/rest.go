@@ -44,14 +44,12 @@ func (r *Rest) MountEndpoint() {
 	userGroup.PATCH("/profile/update-info", r.middleware.AuthenticateUser, r.UpdateUser)
 	userGroup.PATCH("/profile/update-password", r.middleware.AuthenticateUser, r.UpdatePassword)
 
-	// City
 	cityGroup := v1.Group("/city")
 	cityGroup.POST("/create-city", r.CreateCity)
 	cityGroup.GET("/get-city/:id", r.GetCity)
 	cityGroup.GET("/get-city/all-of-the-cities", r.GetAllCity)
 	cityGroup.GET("/search-city", r.SearchCity)
 
-	// Place
 	placeGroup := v1.Group("/place")
 	placeGroup.POST("/create-place", r.CreatePlace)
 	placeGroup.GET("/get-place/:id", r.GetPlaceByID)
@@ -59,7 +57,6 @@ func (r *Rest) MountEndpoint() {
 	placeGroup.GET("/search-place", r.SearchPlace)
 	placeGroup.GET("/get-place/city/:id", r.GetPlaceByCityID)
 
-	// Culinary
 	CulinaryGroup := v1.Group("/culinary")
 	CulinaryGroup.POST("/create-culinary", r.CreateCulinary)
 	CulinaryGroup.GET("/get-culinary/:id", r.GetCulinaryByID)
@@ -67,16 +64,19 @@ func (r *Rest) MountEndpoint() {
 	CulinaryGroup.GET("/search-culinary", r.SearchCulinary)
 	CulinaryGroup.GET("/get-culinary/city/:id", r.GetCulinaryByCityID)
 
-	// Ticket
-	v1.POST("/ticket", r.middleware.AuthenticateUser, r.BuyTicket)
-	v1.GET("/ticket/:id", r.GetTicketByID)
+	TicketGroup := v1.Group("/ticket")
+	TicketGroup.POST("/buy-ticket", r.middleware.AuthenticateUser, r.BuyTicket)
+	TicketGroup.GET("/get-ticket/:id", r.GetTicketByID)
 
-	// Guide
 	guideGroup := v1.Group("/guide")
 	guideGroup.POST("/create-guide", r.CreateGuide)
 	guideGroup.GET("/get-guide/:id", r.GetGuideByID)
 	guideGroup.GET("/get-guide/all-of-the-guides", r.GetAllGuide)
 	guideGroup.PATCH("/patch-guide", r.PatchGuide)
+	guideGroup.POST("/book-guide", r.middleware.AuthenticateUser, r.BookGuide)
+
+	v1.POST("/update-transaction", r.Update)
+	v1.POST("/charge", r.middleware.AuthenticateUser, r.CreateTransaction)
 
 	port := os.Getenv("PORT")
 	if port == "" {

@@ -18,16 +18,16 @@ func (m *middleware) AuthenticateUser(ctx *gin.Context) {
 	}
 
 	token := strings.Split(bearer, " ")[1]
-	userId, err := helper.ValidateToken(token)
+	userID, err := helper.ValidateToken(token)
 	if err != nil {
 		helper.Error(ctx, http.StatusUnauthorized, "failed validate token", err)
 		ctx.Abort()
 		return
 	}
 
-	ctx.Set("user_id", userId)
+	ctx.Set("user_id", userID)
 	user, err := m.service.UserService.GetUser(model.UserParam{
-		ID: userId,
+		ID: userID,
 	})
 	if err != nil {
 		helper.Error(ctx, http.StatusUnauthorized, "failed get user", err)

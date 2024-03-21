@@ -17,6 +17,7 @@ type User struct {
 	Ticket          []Ticket      `json:"-"`
 	Transaction     []Transaction `json:"-"`
 	Order           []Order       `json:"-"`
+	Comment			[]Comment	  `json:"-"`
 	CreatedAt       time.Time     `json:"createdAt" gorm:"autoCreateTime"`
 	UpdatedAt       time.Time     `json:"updatedAt" gorm:"autoUpdateTime"`
 }
