@@ -32,6 +32,12 @@ func NewUserService(userRepository repository.IUserRepository) IUserService {
 }
 
 func (us *UserService) Register(param model.UserRegister) error {
+	if param.Email == "" {
+		return helper.ErrorEmptyEmail()
+	}
+	if param.Password == ""{
+		return helper.ErrorEmptyPassword()
+	}
 	hashPassword, err := helper.HashPassword(param.Password)
 	if err != nil {
 		return err
@@ -51,7 +57,6 @@ func (us *UserService) Register(param model.UserRegister) error {
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -67,7 +72,7 @@ func (u *UserService) Login(param model.UserLogin) (model.UserLoginResponse, err
 
 	err = helper.ComparePassword(user.Password, param.Password)
 	if err != nil {
-		return result, err
+		return result, helper.ErrorInvalidPassword()
 	}
 
 	token, err := helper.CreateJWTToken(user.ID)

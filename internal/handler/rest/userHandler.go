@@ -42,10 +42,13 @@ func (r *Rest) Login(ctx *gin.Context) {
 
 	token, err := r.service.UserService.Login(param)
 	if err != nil {
-		helper.Error(ctx, http.StatusUnauthorized, "failed to login", err)
+		if err == helper.ErrorInvalidPassword() {
+			helper.Error(ctx, http.StatusUnauthorized, "invalid password", err)
+		} else {
+			helper.Error(ctx, http.StatusUnauthorized, "failed to login", err)
+		}
 		return
 	}
-
 	helper.Success(ctx, http.StatusOK, "success login to system", token)
 }
 
@@ -58,7 +61,7 @@ func (r *Rest) UploadPhoto(ctx *gin.Context) {
 	}
 
 	user, err := helper.GetLoginUser(ctx)
-	
+
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "User authentication failed"})
 		return

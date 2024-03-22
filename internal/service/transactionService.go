@@ -13,8 +13,6 @@ import (
 
 type ITransactionService interface {
 	CreateTransaction(userID uuid.UUID, transaction model.TransactionPost) (entity.Transaction, error)
-	// GetByUserID(userID string) ([]entity.Transaction, error)
-	// GetByOrderID(orderID string) (entity.Transaction, error)
 	Update(orderID string) (entity.Transaction, error)
 	GetSuccessByUserID(ID uuid.UUID) ([]entity.Transaction, error)
 	CreateComment(param model.CommentCreate) error

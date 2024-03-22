@@ -1,6 +1,10 @@
 package helper
 
-import "github.com/gin-gonic/gin"
+import (
+	"errors"
+
+	"github.com/gin-gonic/gin"
+)
 
 type Response struct {
 	Status  Status `json:"status"`
@@ -35,4 +39,20 @@ func Error(ctx *gin.Context, code int, message string, err error) {
 		Data:    err.Error(),
 	}
 	ctx.JSON(code, resp)
+}
+
+func ErrorInvalidPassword() error {
+	return errors.New("invalid password")
+}
+
+func ErrorEmptyEmail()error{
+	return errors.New("empty email")
+}
+
+func ErrorEmptyPassword()error{
+	return errors.New("empty password")
+}
+
+func ErrorEmailIsNotUnique()error{
+	return errors.New("email is not unique")
 }
