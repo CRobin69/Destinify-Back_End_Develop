@@ -1,8 +1,6 @@
 package model
 
 import (
-	"time"
-
 	"github.com/google/uuid"
 )
 
@@ -15,16 +13,13 @@ type TransactionByID struct {
 	Status   string `json:"status"`
 }
 
-type TransactionByUser struct {
-	ID        uint      `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	Pict      string    `json:"pict"`
-	Title     string    `json:"title"`
+type TransactionByUserID struct {
+	ID uuid.UUID `json:"-"`
 }
 
 type TransactionPost struct {
 	UserID  uuid.UUID `json:"-"`
-	Amount  int       `json:"amount"`
+	Amount  int       `json:"-"`
 	Method  string    `json:"method" binding:"required"`
-	OrderID uuid.UUID `json:"orderid"`
+	OrderID uuid.UUID `json:"-"`
 }

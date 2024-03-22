@@ -122,7 +122,6 @@ func (or *OrderRepository) GetTicketIDsFromString(formattedString string) ([]uui
 		}
 		ticketIDs = append(ticketIDs, id)
 	}
-	log.Println("ini ubah uuid ke string")
 	return ticketIDs, nil
 }
 
@@ -131,6 +130,5 @@ func (or *OrderRepository) ParseTicketIDs(ticketIDs []uuid.UUID) []string {
 	for _, id := range ticketIDs {
 		formattedIDs = append(formattedIDs, id.String())
 	}
-	log.Println("ini ubah uuid ke string lagi", formattedIDs)
 	return formattedIDs
 }

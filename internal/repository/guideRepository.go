@@ -11,6 +11,7 @@ type IGuideRepository interface {
 	CreateGuide(guide entity.Guide) (entity.Guide, error)
 	GetGuideByID(id uint) (entity.Guide, error)
 	GuidePatchID(id uint) (entity.Guide, error)
+	GetGuideByPlaceID(param model.GuideParam) ([]entity.Guide,error)
 	GetAllGuide(param model.GuideParam) ([]entity.Guide, error)
 	PatchGuide(guide entity.Guide) error
 	BookGuideByID(id uint) (entity.Guide, error)
@@ -53,33 +54,42 @@ func (gr *GuideRepository) GetAllGuide(param model.GuideParam) ([]entity.Guide, 
 	return guide, nil
 }
 
-func (g *GuideRepository) GetGuideByID(id uint) (entity.Guide, error) {
+func (gr *GuideRepository) GetGuideByID(id uint) (entity.Guide, error) {
+	var guide entity.Guide
 	if id == 0 {
 		return entity.Guide{}, nil
 	} 
-	var guide entity.Guide
-	err := g.db.Debug().Where("id = ?", id).First(&guide).Error
+	err := gr.db.Debug().Where("id = ?", id).First(&guide).Error
 	if err != nil {
 		return entity.Guide{}, err
 	}
 	return guide, nil
 }
-func (g *GuideRepository) BookGuideByID(id uint) (entity.Guide, error) {
+
+func (gr *GuideRepository) BookGuideByID(id uint) (entity.Guide, error) {
 	var guide entity.Guide
-	if err := g.db.First(&guide, id).Error; err != nil {
+	if err := gr.db.First(&guide, id).Error; err != nil {
 		return entity.Guide{}, err
 	}
 
 	guide.Booked = true
 
-	if err := g.db.Save(&guide).Error; err != nil {
+	if err := gr.db.Save(&guide).Error; err != nil {
 		return entity.Guide{}, err
 	}
 
-	// Re-fetch the guide to ensure the changes are applied
-	if err := g.db.First(&guide, id).Error; err != nil {
+	if err := gr.db.First(&guide, id).Error; err != nil {
 		return entity.Guide{}, err
 	}
 
+	return guide, nil
+}
+
+func (gr *GuideRepository)GetGuideByPlaceID(param model.GuideParam) ([]entity.Guide,error){
+	var guide []entity.Guide
+	err := gr.db.Debug().Where(&param).Find(&guide).Error
+	if err != nil {
+		return guide, err
+	}
 	return guide, nil
 }
