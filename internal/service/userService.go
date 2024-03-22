@@ -21,12 +21,12 @@ type IUserService interface {
 }
 
 type UserService struct {
-	ur repository.IUserRepository
+	userRepository repository.IUserRepository
 }
 
 func NewUserService(userRepository repository.IUserRepository) IUserService {
 	return &UserService{
-		ur: userRepository,
+		userRepository: userRepository,
 	}
 
 }
@@ -47,7 +47,7 @@ func (us *UserService) Register(param model.UserRegister) error {
 		Password: param.Password,
 	}
 
-	_, err = us.ur.CreateUser(user)
+	_, err = us.userRepository.CreateUser(user)
 	if err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func (us *UserService) Register(param model.UserRegister) error {
 func (u *UserService) Login(param model.UserLogin) (model.UserLoginResponse, error) {
 	result := model.UserLoginResponse{}
 
-	user, err := u.ur.GetUser(model.UserParam{
+	user, err := u.userRepository.GetUser(model.UserParam{
 		Email: param.Email,
 	})
 	if err != nil {
@@ -82,13 +82,13 @@ func (u *UserService) Login(param model.UserLogin) (model.UserLoginResponse, err
 
 func (u *UserService) GetUser(param model.UserParam) (entity.User, error) {
 
-	return u.ur.GetUser(param)
+	return u.userRepository.GetUser(param)
 }
 
 func (u *UserService) UploadPhoto(param model.UploadPhoto) (string, error) {
 	paramUser := model.UserParam{}
 	paramUser.ID = param.ID
-	user, err := u.ur.GetUser(paramUser)
+	user, err := u.userRepository.GetUser(paramUser)
 	if err != nil{
 		return "", nil
 	}
@@ -107,7 +107,7 @@ func (u *UserService) UploadPhoto(param model.UploadPhoto) (string, error) {
 		return "", err
 	}
 
-	err = u.ur.UpdateUser(entity.User{
+	err = u.userRepository.UpdateUser(entity.User{
 		PhotoLink: link,
 	}, model.UserParam{
 		ID: user.ID,
@@ -122,7 +122,7 @@ func (u *UserService) UploadPhoto(param model.UploadPhoto) (string, error) {
 func (u *UserService) UpdateUser(id uuid.UUID) (string, error) {
 	param := model.UserParam{}
 	param.ID = id
-	user, err := u.ur.GetUser(param)
+	user, err := u.userRepository.GetUser(param)
 	if err != nil {
 		return "", err
 	}
@@ -135,7 +135,7 @@ func (u *UserService) UpdateUser(id uuid.UUID) (string, error) {
 		user.Name = paramUpdate.Name
 	}
 
-	err = u.ur.UpdateUser(user, param)
+	err = u.userRepository.UpdateUser(user, param)
 	if err != nil {
 		return "", err
 	}
@@ -147,7 +147,7 @@ func (u *UserService) UpdatePassword(param model.UpdatePassword) (string, error)
 	paramUser := model.UserParam{
 		ID: param.ID,
 	}
-	user, err := u.ur.GetUser(paramUser)
+	user, err := u.userRepository.GetUser(paramUser)
 	if err != nil {
 		return "", err
 	}
@@ -161,7 +161,7 @@ func (u *UserService) UpdatePassword(param model.UpdatePassword) (string, error)
 		return "", err
 	}
 
-	err = u.ur.UpdatePassword(model.UpdatePassword{
+	err = u.userRepository.UpdatePassword(model.UpdatePassword{
 		ID:              user.ID,
 		OldPassword:     param.OldPassword,
 		NewPassword:     hashPassword,
@@ -175,7 +175,7 @@ func (u *UserService) UpdatePassword(param model.UpdatePassword) (string, error)
 }
 
 func (u *UserService) FindByID(id uuid.UUID) (entity.User, error) {
-	user, err := u.ur.FindByID(id)
+	user, err := u.userRepository.FindByID(id)
 	if err != nil {
 		return user, err
 	}

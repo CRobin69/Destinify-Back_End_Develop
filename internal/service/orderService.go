@@ -14,17 +14,17 @@ type IOrderService interface {
 }
 
 type OrderService struct {
-	or repository.IOrderRepository
+	orderRepository repository.IOrderRepository
 }
 
 func NewOrderService(orderRepository repository.IOrderRepository) IOrderService {
 	return &OrderService{
-		or: orderRepository,
+		orderRepository: orderRepository,
 	}
 }
 
 func (os *OrderService) CreateOrder(order entity.Order) (entity.Order, error) {
-	createdOrder, err := os.or.CreateOrder(order)
+	createdOrder, err := os.orderRepository.CreateOrder(order)
 	if err != nil {
 		return entity.Order{}, err
 	}
@@ -32,7 +32,7 @@ func (os *OrderService) CreateOrder(order entity.Order) (entity.Order, error) {
 }
 
 func (os *OrderService) GetOrderByUserID(userID uuid.UUID) (entity.Order, error) {
-	orders, err := os.or.GetOrdersByUserID(userID)
+	orders, err := os.orderRepository.GetOrdersByUserID(userID)
 	if err != nil {
 		return entity.Order{}, err
 	}
@@ -40,7 +40,7 @@ func (os *OrderService) GetOrderByUserID(userID uuid.UUID) (entity.Order, error)
 }
 
 func (os *OrderService) GetOrderByID(orderID uuid.UUID) (entity.Order, error) {
-	order, err := os.or.GetOrderByID(orderID)
+	order, err := os.orderRepository.GetOrderByID(orderID)
 	if err != nil {
 		return entity.Order{}, err
 	}

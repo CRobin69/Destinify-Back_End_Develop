@@ -15,12 +15,12 @@ type IPlaceService interface {
 }
 
 type PlaceService struct {
-	pr repository.IPlaceRepository
+	placeRepository repository.IPlaceRepository
 }
 
 func NewPlaceService(placeRepository repository.IPlaceRepository) IPlaceService {
 	return &PlaceService{
-		pr: placeRepository,
+		placeRepository: placeRepository,
 	}
 }
 
@@ -43,7 +43,7 @@ func (ps *PlaceService) CreateData(param model.PlaceCreate) (error) {
 		PlaceImage:    param.PlaceImage,
 	}
 
-	_, err := ps.pr.CreateData(place)
+	_, err := ps.placeRepository.CreateData(place)
 	if err != nil {
 		return err
 	}
@@ -51,17 +51,17 @@ func (ps *PlaceService) CreateData(param model.PlaceCreate) (error) {
 }
 
 func (ps *PlaceService) GetPlaceByID(param model.PlaceParam) (entity.Place, error) {
-	return ps.pr.GetPlaceByID(param.ID)
+	return ps.placeRepository.GetPlaceByID(param.ID)
 }
 
 func (ps *PlaceService) GetAllPlace(param model.PlaceParam) ([]entity.Place, error) {
-	return ps.pr.GetAllPlace(param)
+	return ps.placeRepository.GetAllPlace(param)
 }
 
 func (ps *PlaceService) SearchPlace(param model.SearchPlace) ([]entity.Place, error) {
-	return ps.pr.SearchPlace(param)
+	return ps.placeRepository.SearchPlace(param)
 }
 
 func (ps *PlaceService) GetPlaceByCityID(param model.PlaceParam) ([]entity.Place, error) {
-	return ps.pr.GetPlaceByCityID(param)
+	return ps.placeRepository.GetPlaceByCityID(param)
 }

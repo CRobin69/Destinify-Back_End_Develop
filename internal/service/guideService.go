@@ -12,16 +12,15 @@ type IGuideService interface {
 	GetGuideByID(param model.GuideParam) (entity.Guide, error)
 	GetAllGuide(param model.GuideParam) ([]entity.Guide, error)
 	PatchGuide(param model.GuidePatch) error
-	BookGuideByID(param model.GuideBook) (entity.Guide, error)
 }
 
 type GuideService struct {
-	gr repository.IGuideRepository
+	guideRepository repository.IGuideRepository
 }
 
 func NewGuideService(guideRepository repository.IGuideRepository) IGuideService {
 	return &GuideService{
-		gr: guideRepository,
+		guideRepository: guideRepository,
 	}
 }
 
@@ -37,7 +36,7 @@ func (gs *GuideService) CreateGuide(param model.CreateGuide) error {
 		GuideContact: param.GuideContact,
 	}
 
-	_, err := gs.gr.CreateGuide(guide)
+	_, err := gs.guideRepository.CreateGuide(guide)
 	if err != nil {
 		return err
 	}
@@ -45,15 +44,15 @@ func (gs *GuideService) CreateGuide(param model.CreateGuide) error {
 }
 
 func (gs *GuideService) GetAllGuide(param model.GuideParam) ([]entity.Guide, error) {
-	return gs.gr.GetAllGuide(param)
+	return gs.guideRepository.GetAllGuide(param)
 }
 
 func (gs *GuideService) GuidePatchID(param model.GuidePatch) (entity.Guide, error) {
-	return gs.gr.GuidePatchID(param.ID)
+	return gs.guideRepository.GuidePatchID(param.ID)
 }
 
 func (gs *GuideService) PatchGuide(param model.GuidePatch) error {
-	existingGuide, err := gs.gr.GuidePatchID(param.ID)
+	existingGuide, err := gs.guideRepository.GuidePatchID(param.ID)
 	if err != nil {
 		return err
 	}
@@ -78,19 +77,9 @@ func (gs *GuideService) PatchGuide(param model.GuidePatch) error {
 	}
 	
 
-	return gs.gr.PatchGuide(existingGuide)
+	return gs.guideRepository.PatchGuide(existingGuide)
 }
 
 func (gs *GuideService) GetGuideByID(param model.GuideParam) (entity.Guide, error) {
-	return gs.gr.GetGuideByID(param.ID)
-}
-
-func (gs *GuideService) BookGuideByID(param model.GuideBook) (entity.Guide, error) {
-	guider, err := gs.gr.GuidePatchID(param.ID)
-	if err != nil {
-		return guider, err
-	}
-
-	guider.Booked = true
-	return guider, gs.gr.PatchGuide(guider)
+	return gs.guideRepository.GetGuideByID(param.ID)
 }

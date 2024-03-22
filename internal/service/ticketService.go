@@ -17,18 +17,18 @@ type ITicketService interface {
 }
 
 type TicketService struct {
-	tr repository.ITicketRepository
-	or repository.IOrderRepository
-	pr repository.IPlaceRepository
-	gr repository.IGuideRepository
+	ticketRepository repository.ITicketRepository
+	orderRepository  repository.IOrderRepository
+	placeRepository  repository.IPlaceRepository
+	guideRepository  repository.IGuideRepository
 }
 
 func NewTicketService(ticketRepository repository.ITicketRepository, orderRepository repository.IOrderRepository, placeRepository repository.IPlaceRepository, guideRepository repository.IGuideRepository) ITicketService {
 	return &TicketService{
-		tr: ticketRepository,
-		or: orderRepository,
-		pr: placeRepository,
-		gr: guideRepository,
+		ticketRepository: ticketRepository,
+		orderRepository:  orderRepository,
+		placeRepository:  placeRepository,
+		guideRepository:  guideRepository,
 	}
 }
 
@@ -37,13 +37,13 @@ func (ts *TicketService) BuyTickets(param model.TicketBuy) (entity.Order, []enti
 		ID: param.PlaceID,
 	}
 
-	place, err := ts.pr.GetPlaceByID(placeParam.ID)
+	place, err := ts.placeRepository.GetPlaceByID(placeParam.ID)
 	if err != nil {
 		return entity.Order{}, nil, err
 	}
 	var guide entity.Guide
 	if param.GuideID != 0 {
-		g, err := ts.gr.BookGuideByID(param.GuideID)
+		g, err := ts.guideRepository.BookGuideByID(param.GuideID)
 		if err != nil {
 			return entity.Order{}, nil, err
 		}
@@ -61,12 +61,12 @@ func (ts *TicketService) BuyTickets(param model.TicketBuy) (entity.Order, []enti
 		newOrder.GuideID = param.GuideID
 		newOrder.TotalPrice += guide.GuidePrice
 	}
-	
-	createdOrder, err := ts.or.CreateOrder(newOrder)
+
+	createdOrder, err := ts.orderRepository.CreateOrder(newOrder)
 	if err != nil {
 		return newOrder, nil, err
 	}
-	
+
 	var ticketsID []uuid.UUID
 
 	var tickets []entity.Ticket
@@ -78,15 +78,16 @@ func (ts *TicketService) BuyTickets(param model.TicketBuy) (entity.Order, []enti
 			TicketPrice: param.TicketPrice,
 			OrderID:     newOrder.ID,
 		}
-		createdTicket, err := ts.tr.BuyTicket(ticket)
+		createdTicket, err := ts.ticketRepository.BuyTicket(ticket)
 		if err != nil {
 			return createdOrder, tickets, err
 		}
 		tickets = append(tickets, createdTicket)
 		ticketsID = append(ticketsID, createdTicket.ID)
 	}
+	
 	newOrder.Tickets = ticketsID
-	err = ts.or.PassTicketToOrder(newOrder.ID, ticketsID)
+	err = ts.orderRepository.PassTicketToOrder(newOrder.ID, ticketsID)
 	if err != nil {
 		log.Println("Failed to associate tickets with order", err)
 	}
@@ -94,9 +95,9 @@ func (ts *TicketService) BuyTickets(param model.TicketBuy) (entity.Order, []enti
 }
 
 func (ts *TicketService) GetTicketByID(param model.TicketParam) (entity.Ticket, error) {
-	return ts.tr.GetTicketByID(param)
+	return ts.ticketRepository.GetTicketByID(param)
 }
 
 func (ts *TicketService) GetTicketByUserID(param model.TicketParam) ([]entity.Ticket, error) {
-	return ts.tr.GetTicketByUserID(param)
+	return ts.ticketRepository.GetTicketByUserID(param)
 }

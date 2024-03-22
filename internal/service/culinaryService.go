@@ -15,12 +15,12 @@ type ICulinaryService interface {
 }
 
 type CulinarService struct {
-	cr repository.ICulinaryRepository
+	culinaryRepository repository.ICulinaryRepository
 }
 
 func NewCulinaryService(culinaryRepository repository.ICulinaryRepository) ICulinaryService {
 	return &CulinarService{
-		cr: culinaryRepository,
+		culinaryRepository: culinaryRepository,
 	}
 }
 
@@ -38,7 +38,7 @@ func (cs *CulinarService) CreateData(param model.CulinaryCreate) error {
 		CulinaryAward:      param.CulinaryAward,
 	}
 
-	_, err := cs.cr.CreateData(culinary)
+	_, err := cs.culinaryRepository.CreateData(culinary)
 	if err != nil {
 		return err
 	}
@@ -46,17 +46,17 @@ func (cs *CulinarService) CreateData(param model.CulinaryCreate) error {
 }
 
 func (cs *CulinarService) GetCulinaryByID(param model.CulinaryParam) (entity.Culinary, error) {
-	return cs.cr.GetCulinaryByID(param)
+	return cs.culinaryRepository.GetCulinaryByID(param)
 }
 
 func (cs *CulinarService) GetAllCulinary(param model.CulinaryParam) ([]entity.Culinary, error) {
-	return cs.cr.GetAllCulinary(param)
+	return cs.culinaryRepository.GetAllCulinary(param)
 }
 
 func (cs *CulinarService) SearchCulinary(param model.SearchCulinary) ([]entity.Culinary, error) {
-	return cs.cr.SearchCulinary(param)
+	return cs.culinaryRepository.SearchCulinary(param)
 }
 
 func (cs *CulinarService) GetCulinaryByCityID(param model.CulinaryParam) ([]entity.Culinary, error) {
-	return cs.cr.GetCulinaryByCityID(param)
+	return cs.culinaryRepository.GetCulinaryByCityID(param)
 }
