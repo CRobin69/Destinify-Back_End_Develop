@@ -15,7 +15,6 @@ type ITransactionService interface {
 	CreateTransaction(userID uuid.UUID, transaction model.TransactionPost) (entity.Transaction, error)
 	Update(orderID string) (entity.Transaction, error)
 	GetSuccessByUserID(ID uuid.UUID) ([]entity.Transaction, error)
-	CreateComment(param model.CommentCreate) error
 }
 
 type TransactionService struct {
@@ -176,25 +175,3 @@ func (ts *TransactionService) GetSuccessByUserID(ID uuid.UUID) ([]entity.Transac
 	return transactions, nil
 }
 
-func (ts *TransactionService) CreateComment(param model.CommentCreate) error {
-	successTransaction, err := ts.transactionRepository.FindSuccessByUserID(param.UserID)
-	if err != nil {
-		return err
-	}
-
-	for _, transaction := range successTransaction {
-		comment := entity.Comment{
-			UserID:     param.UserID,
-			StarReview: param.StarReview,
-			View:       param.View,
-			Feedback:   param.Feedback,
-			Opinion:    param.Opinion,
-			PlaceID:    transaction.PlaceID,
-		}
-		_, err := ts.commentRepository.CreateComment(comment)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}

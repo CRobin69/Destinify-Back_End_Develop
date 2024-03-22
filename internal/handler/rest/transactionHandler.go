@@ -77,21 +77,4 @@ func (r *Rest) TransactionHistory(ctx *gin.Context) {
 	helper.Success(ctx, http.StatusOK, "history showed succesfully", history)
 }
 
-func (r *Rest) CreateComment(ctx *gin.Context) {
-	var comment model.CommentCreate
-	user, err := helper.GetLoginUser(ctx)
-	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "User authentication failed"})
-		return
-	}
 
-	comment.UserID = user.ID
-
-	err = r.service.TransactionService.CreateComment(comment)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch transactions"})
-		return
-	}
-
-	helper.Success(ctx, http.StatusCreated, "success create comment", nil)
-}

@@ -76,13 +76,11 @@ func (r *Rest) MountEndpoint() {
 	transactionGroup.POST("/update-transaction", r.Update)
 	transactionGroup.GET("/transaction-history", r.middleware.AuthenticateUser, r.TransactionHistory)
 	transactionGroup.POST("/charge-transaction", r.middleware.AuthenticateUser, r.CreateTransaction)
-	transactionGroup.POST("/create-comment", r.middleware.AuthenticateUser, r.CreateComment)
 	
 	commentGroup := v1.Group("/comment")
 	commentGroup.GET("/get-comment/:placeid", r.GetCommentByPlaceID)
 	commentGroup.GET("/get-comment-user", r.middleware.AuthenticateUser, r.GetCommentByUserID)
 	commentGroup.PUT("/update-comment/:id", r.middleware.AuthenticateUser, r.UpdateComment)
-
 
 
 	port := os.Getenv("PORT")
