@@ -2,7 +2,6 @@ package repository
 
 import (
 	"INTERN_BCC/entity"
-	"log"
 	"strings"
 
 	"github.com/google/uuid"
@@ -76,7 +75,7 @@ func (or *OrderRepository) GetOrdersByUserID(userID uuid.UUID) (entity.Order, er
 	var orders entity.Order
 	var ticketIDs string
 	var newestOrderID string
-	
+
 	if err := or.db.Model(&entity.Order{}).Where("user_id = ?", userID).Order("created_at ASC").Pluck("id", &newestOrderID).Error; err != nil {
 		return entity.Order{}, err
 	}
@@ -106,7 +105,7 @@ func (or *OrderRepository) GetOrdersByUserID(userID uuid.UUID) (entity.Order, er
 		TotalPrice: orders.TotalPrice,
 		Tickets:    tickets,
 	}
-	log.Println("ini order", order)
+
 	return order, nil
 }
 
