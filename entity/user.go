@@ -13,7 +13,7 @@ type User struct {
 	Email           string        `json:"email" gorm:"type:varchar(255);not null;unique"`
 	Password        string        `json:"password" gorm:"type:varchar(255);not null;"`
 	ConfirmPassword string        `json:"confirm_password" gorm:"-"`
-	PhotoLink       string        `json:"-" gorm:"type:varchar(500)"`
+	PhotoLink       string        `json:"-" gorm:"type:text"`
 	Ticket          []Ticket      `json:"-"`
 	Transaction     []Transaction `json:"-"`
 	Order           []Order       `json:"-"`

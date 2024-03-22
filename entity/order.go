@@ -12,8 +12,6 @@ type Order struct {
 	GuideID     uint        `json:"guide_id" gorm:"foreignkey:ID;references:guides;onUpdate:CASCADE;onDelete:SET NULL"`
 	TotalPrice  int         `json:"total_price" gorm:"type:int;"`
 	Tickets     []uuid.UUID `json:"tickets" gorm:"type:uuid[]"`
-	Transaction Transaction `json:"-"`
-	Guide       Guide       `json:"-"`
 	CreatedAt   time.Time   `json:"createdAt" gorm:"autoCreateTime"`
 	UpdatedAt   time.Time   `json:"updatedAt" gorm:"autoUpdateTime"`
 }
