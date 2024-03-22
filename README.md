@@ -1,6 +1,6 @@
 # ✈ Destinify - Intern BCC Project (2024)
 <p align="center">
-  <img width="500" alt="Destinify Logo" src="https://urjnflwtflutgbchgxgd.supabase.co/storage/v1/object/public/UserProfile/Frame%20330%202.png?t=2024-03-21T18%3A03%3A11.511Z">
+  <img width="500" alt="Destinify Logo" src="https://urjnflwtflutgbchgxgd.supabase.co/storage/v1/object/public/UserProfile/Frame%20330%202.png?t=2024-03-22T14%3A50%3A17.339Z">
 </p>
 
 ## 📖 Description
@@ -13,5 +13,5 @@ This repository stores the source code of my application, focusing on the server
 ![Go](https://img.shields.io/badge/go-%2300ADD8.svg?style=for-the-badge&logo=go&logoColor=white)  ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) ![Heroku](https://img.shields.io/badge/heroku-%23430098.svg?style=for-the-badge&logo=heroku&logoColor=white)  ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 
 ## 📁 Documentation
-
+https://documenter.getpostman.com/view/33274007/2sA2xnwUv5
 
