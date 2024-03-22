@@ -1,6 +1,6 @@
 # ✈ Destinify - Intern BCC Project (2024)
 <p align="center">
-  <img width="500" alt="Destinify Logo" src="https://urjnflwtflutgbchgxgd.supabase.co/storage/v1/object/public/UserProfile/Frame%20331.png">
+  <img width="500" alt="Destinify Logo" src="https://urjnflwtflutgbchgxgd.supabase.co/storage/v1/object/public/UserProfile/Frame%20330%202.png?t=2024-03-22T14%3A50%3A17.339Z">
 </p>
 
 ## 📖 Description
