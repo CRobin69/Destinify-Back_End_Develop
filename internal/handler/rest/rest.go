@@ -32,10 +32,8 @@ func (r *Rest) MountEndpoint() {
 	r.router.Use(r.middleware.Timeout())
 
 	v1 := r.router.Group("/api/v1")
-	v1.GET("/health-check", healthCheck)
 	v1.GET("/time-out", testTimeout)
 
-	// User
 	userGroup := v1.Group("/user")
 	userGroup.GET("/me", r.middleware.AuthenticateUser, getLoginUser)
 	userGroup.POST("/register", r.Register)
@@ -73,10 +71,19 @@ func (r *Rest) MountEndpoint() {
 	guideGroup.GET("/get-guide/:id", r.GetGuideByID)
 	guideGroup.GET("/get-guide/all-of-the-guides", r.GetAllGuide)
 	guideGroup.PATCH("/patch-guide", r.PatchGuide)
-	guideGroup.POST("/book-guide", r.middleware.AuthenticateUser, r.BookGuide)
 
-	v1.POST("/update-transaction", r.Update)
-	v1.POST("/charge", r.middleware.AuthenticateUser, r.CreateTransaction)
+	transactionGroup := v1.Group("/transaction")
+	transactionGroup.POST("/update-transaction", r.Update)
+	transactionGroup.GET("/transaction-history", r.middleware.AuthenticateUser, r.TransactionHistory)
+	transactionGroup.POST("/charge-transaction", r.middleware.AuthenticateUser, r.CreateTransaction)
+	transactionGroup.POST("/create-comment", r.middleware.AuthenticateUser, r.CreateComment)
+	
+	commentGroup := v1.Group("/comment")
+	commentGroup.GET("/get-comment/:placeid", r.GetCommentByPlaceID)
+	commentGroup.GET("/get-comment-user", r.middleware.AuthenticateUser, r.GetCommentByUserID)
+	commentGroup.PUT("/update-comment/:id", r.middleware.AuthenticateUser, r.UpdateComment)
+
+
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -84,12 +91,6 @@ func (r *Rest) MountEndpoint() {
 	}
 
 	r.router.Run(fmt.Sprintf(":%s", port))
-}
-
-func healthCheck(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"message": "success",
-	})
 }
 
 func testTimeout(ctx *gin.Context) {

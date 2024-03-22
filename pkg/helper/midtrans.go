@@ -1,7 +1,6 @@
 package helper
 
 import (
-	"log"
 	"os"
 
 	"github.com/midtrans/midtrans-go"
@@ -23,12 +22,11 @@ func (c *MdtClient) CreateTransaction(orderID string, guideID string, ticketPric
 	var items []midtrans.ItemDetails
 	var totalAmount int64
 
-	// Create items and calculate total amount for tickets
 	for _, ticketID := range ticketIDs {
 		items = append(items, midtrans.ItemDetails{
 			ID:    ticketID,
 			Name:  "Ticket" + " " + placeName,
-			Price: int64(ticketPrice), // Assuming each ticket has the same price
+			Price: int64(ticketPrice),
 			Qty:   1,
 		})
 		totalAmount += int64(ticketPrice)
@@ -37,7 +35,7 @@ func (c *MdtClient) CreateTransaction(orderID string, guideID string, ticketPric
 	if guideID != "" {
 		items = append(items, midtrans.ItemDetails{
 			ID:    guideID,
-			Name:  "Tour Guide " + placeName + " : " + guideName,
+			Name:  "Tour Guide " + placeName + " : Kak " + guideName,
 			Price: int64(guidePrice),
 			Qty:   1,
 		})
@@ -45,7 +43,7 @@ func (c *MdtClient) CreateTransaction(orderID string, guideID string, ticketPric
 
 		items = append(items, midtrans.ItemDetails{
 			ID:    "TAX",
-			Name:  "Guide Tax for : " + placeName,
+			Name:  "Tour Guide Tax " + placeName,
 			Price: int64(taxGuide),
 			Qty:   1,
 		})
@@ -57,11 +55,9 @@ func (c *MdtClient) CreateTransaction(orderID string, guideID string, ticketPric
 		Price: int64(taxTicket),
 		Qty:   int32(len(ticketIDs)),
 	})
-	totalTax := int64(taxTicket * float64(len(ticketIDs)) + taxGuide)
-    totalAmount += totalTax
+	totalTax := int64(taxTicket*float64(len(ticketIDs)) + taxGuide)
+	totalAmount += totalTax
 
-	log.Println(taxTicket)
-	// Create charge request
 	chargeReq := &coreapi.ChargeReq{
 		PaymentType: coreapi.PaymentTypeBankTransfer,
 		TransactionDetails: midtrans.TransactionDetails{
@@ -76,7 +72,6 @@ func (c *MdtClient) CreateTransaction(orderID string, guideID string, ticketPric
 		},
 	}
 
-	// Set bank transfer details based on the selected bank
 	switch bank {
 	case "bca":
 		chargeReq.BankTransfer = &coreapi.BankTransferDetails{Bank: midtrans.BankBca}
@@ -86,7 +81,6 @@ func (c *MdtClient) CreateTransaction(orderID string, guideID string, ticketPric
 		chargeReq.BankTransfer = &coreapi.BankTransferDetails{Bank: midtrans.BankBni}
 	}
 
-	// Charge the transaction
 	coreApiRes, err := c.c.ChargeTransaction(chargeReq)
 	if err != nil {
 		return nil, err
