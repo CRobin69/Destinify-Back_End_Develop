@@ -6,6 +6,7 @@ import (
 	"INTERN_BCC/model"
 	"INTERN_BCC/pkg/helper"
 	"INTERN_BCC/pkg/supabase"
+	"log"
 
 	"github.com/google/uuid"
 )
@@ -15,7 +16,7 @@ type IUserService interface {
 	GetUser(param model.UserParam) (entity.User, error)
 	Login(param model.UserLogin) (model.UserLoginResponse, error)
 	UploadPhoto(param model.UploadPhoto) (string, error)
-	UpdateUser(id uuid.UUID) (string, error)
+	UpdateUser(param model.UpdateUser) (string, error)
 	UpdatePassword(param model.UpdatePassword) (string, error)
 	FindByID(id uuid.UUID) (entity.User, error)
 }
@@ -35,7 +36,7 @@ func (us *UserService) Register(param model.UserRegister) error {
 	if param.Email == "" {
 		return helper.ErrorEmptyEmail()
 	}
-	if param.Password == ""{
+	if param.Password == "" {
 		return helper.ErrorEmptyPassword()
 	}
 	hashPassword, err := helper.HashPassword(param.Password)
@@ -94,10 +95,10 @@ func (u *UserService) UploadPhoto(param model.UploadPhoto) (string, error) {
 	paramUser := model.UserParam{}
 	paramUser.ID = param.ID
 	user, err := u.userRepository.GetUser(paramUser)
-	if err != nil{
+	if err != nil {
 		return "", nil
 	}
-	
+
 	supabaseStorage := supabase.NewSupabaseStorage()
 
 	if user.PhotoLink != "" {
@@ -124,22 +125,21 @@ func (u *UserService) UploadPhoto(param model.UploadPhoto) (string, error) {
 	return link, nil
 }
 
-func (u *UserService) UpdateUser(id uuid.UUID) (string, error) {
+func (u *UserService) UpdateUser(params model.UpdateUser) (string, error) {
 	param := model.UserParam{}
-	param.ID = id
+	param.ID = params.ID
+
 	user, err := u.userRepository.GetUser(param)
 	if err != nil {
 		return "", err
 	}
-	paramUpdate := model.UpdateUser{}
-
-	if paramUpdate.HP != "" {
-		user.HP = paramUpdate.HP
+	if params.HP != "" {
+		user.HP = params.HP
 	}
-	if paramUpdate.Name != "" {
-		user.Name = paramUpdate.Name
+	if params.Name != "" {
+		user.Name = params.Name
 	}
-
+	log.Println(params.HP)
 	err = u.userRepository.UpdateUser(user, param)
 	if err != nil {
 		return "", err

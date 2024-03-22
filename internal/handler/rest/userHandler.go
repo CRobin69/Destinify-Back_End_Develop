@@ -90,7 +90,7 @@ func (r *Rest) UpdateUser(ctx *gin.Context) {
 		return
 	}
 	param.ID = user.ID
-	_, err = r.service.UserService.UpdateUser(param.ID)
+	_, err = r.service.UserService.UpdateUser(param)
 	if err != nil {
 		helper.Error(ctx, http.StatusInternalServerError, "failed to update user", err)
 		return
