@@ -6,7 +6,6 @@ import (
 	"INTERN_BCC/model"
 	"INTERN_BCC/pkg/helper"
 	"INTERN_BCC/pkg/supabase"
-	"log"
 
 	"github.com/google/uuid"
 )
@@ -139,7 +138,7 @@ func (u *UserService) UpdateUser(params model.UpdateUser) (string, error) {
 	if params.Name != "" {
 		user.Name = params.Name
 	}
-	log.Println(params.HP)
+
 	err = u.userRepository.UpdateUser(user, param)
 	if err != nil {
 		return "", err
