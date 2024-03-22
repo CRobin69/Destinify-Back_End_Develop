@@ -69,26 +69,4 @@ func (r *Rest) GetGuideByID(ctx *gin.Context) {
 	helper.Success(ctx, http.StatusOK, "success get guide", guide)
 }
 
-func (r *Rest) BookGuide(ctx *gin.Context) {
-	var param model.GuideBook
-	if err := ctx.ShouldBindJSON(&param); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
 
-	userID, err := helper.GetLoginUser(ctx)
-	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "User authentication failed"})
-		return
-	}
-
-	param.UserID = userID.ID
-
-	guide, err := r.service.GuideService.BookGuideByID(param)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to book guide", "details": err.Error()})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, gin.H{"message": "Guide booked successfully", "Guide": guide})
-}

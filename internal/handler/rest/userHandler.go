@@ -34,7 +34,6 @@ func (r *Rest) Register(ctx *gin.Context) {
 
 func (r *Rest) Login(ctx *gin.Context) {
 	param := model.UserLogin{}
-
 	err := ctx.ShouldBindJSON(&param)
 	if err != nil {
 		helper.Error(ctx, http.StatusBadRequest, "failed to bind input", err)
@@ -43,7 +42,7 @@ func (r *Rest) Login(ctx *gin.Context) {
 
 	token, err := r.service.UserService.Login(param)
 	if err != nil {
-		helper.Error(ctx, http.StatusInternalServerError, "failed to login", err)
+		helper.Error(ctx, http.StatusUnauthorized, "failed to login", err)
 		return
 	}
 

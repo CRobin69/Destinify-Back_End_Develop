@@ -33,6 +33,7 @@ func (r *Rest) GetPlaceByID(ctx *gin.Context) {
 		helper.Error(ctx, http.StatusBadRequest, "invalid id", err)
 		return
 	}
+	
 	param := model.PlaceParam{ID: uint(idUint)}
 	place, err := r.service.PlaceService.GetPlaceByID(param)
 	if err != nil {

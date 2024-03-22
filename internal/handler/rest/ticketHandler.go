@@ -27,20 +27,13 @@ func (r *Rest) BuyTicket(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	userID, exists := ctx.Get("user_id")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found"})
+	user, err := helper.GetLoginUser(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "User authentication failed"})
 		return
 	}
-
-	realUserID, ok := userID.(uuid.UUID)
-	if !ok {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user ID"})
-		return
-	}
-
-	ticketBuy.UserID = realUserID
+	
+	ticketBuy.UserID = user.ID
 
 	order, tickets, err := r.service.TicketService.BuyTickets(ticketBuy)
 	if err != nil {
