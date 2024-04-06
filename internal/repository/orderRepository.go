@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"INTERN_BCC/entity"
+	"github.com/CRobin69/Destinify-Back_End_Develop/entity"
 	"strings"
 
 	"github.com/google/uuid"

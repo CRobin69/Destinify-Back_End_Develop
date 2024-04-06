@@ -1,4 +1,4 @@
-module INTERN_BCC
+module github.com/CRobin69/Destinify-Back_End_Develop
 
 go 1.22.0
 

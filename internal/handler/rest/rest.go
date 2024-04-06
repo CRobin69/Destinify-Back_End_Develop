@@ -1,10 +1,10 @@
 package rest
 
 import (
-	"INTERN_BCC/entity"
-	"INTERN_BCC/internal/service"
-	"INTERN_BCC/pkg/helper"
-	"INTERN_BCC/pkg/middleware"
+	"github.com/CRobin69/Destinify-Back_End_Develop/entity"
+	"github.com/CRobin69/Destinify-Back_End_Develop/internal/service"
+	"github.com/CRobin69/Destinify-Back_End_Develop/pkg/helper"
+	"github.com/CRobin69/Destinify-Back_End_Develop/pkg/middleware"
 	"errors"
 	"fmt"
 	"net/http"

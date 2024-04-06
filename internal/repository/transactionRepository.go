@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"INTERN_BCC/entity"
+	"github.com/CRobin69/Destinify-Back_End_Develop/entity"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -26,10 +26,10 @@ func NewTransactionRepository(db *gorm.DB) ITransactionRepository {
 }
 
 func (tr *TransactionRepository) CreateTransaction(transaction entity.Transaction) (entity.Transaction, error) {
-    if err := tr.db.Create(&transaction).Error; err != nil {
-        return entity.Transaction{}, err
-    }
-    return transaction, nil
+	if err := tr.db.Create(&transaction).Error; err != nil {
+		return entity.Transaction{}, err
+	}
+	return transaction, nil
 }
 
 func (tr *TransactionRepository) FindByUserID(userID uuid.UUID) ([]entity.Transaction, error) {

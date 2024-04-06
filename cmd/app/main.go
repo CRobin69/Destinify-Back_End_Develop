@@ -1,11 +1,11 @@
 package main
 
 import (
-	"INTERN_BCC/internal/handler/rest"
-	"INTERN_BCC/internal/repository"
-	"INTERN_BCC/internal/service"
-	"INTERN_BCC/pkg/database/postgres"
-	"INTERN_BCC/pkg/middleware"
+	"github.com/CRobin69/Destinify-Back_End_Develop/internal/handler/rest"
+	"github.com/CRobin69/Destinify-Back_End_Develop/internal/repository"
+	"github.com/CRobin69/Destinify-Back_End_Develop/internal/service"
+	"github.com/CRobin69/Destinify-Back_End_Develop/pkg/database/postgres"
+	"github.com/CRobin69/Destinify-Back_End_Develop/pkg/middleware"
 	"os"
 	"log"
 	"github.com/joho/godotenv"

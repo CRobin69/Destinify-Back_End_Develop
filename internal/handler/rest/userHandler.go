@@ -1,8 +1,8 @@
 package rest
 
 import (
-	"INTERN_BCC/model"
-	"INTERN_BCC/pkg/helper"
+	"github.com/CRobin69/Destinify-Back_End_Develop/model"
+	"github.com/CRobin69/Destinify-Back_End_Develop/pkg/helper"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

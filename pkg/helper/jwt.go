@@ -1,7 +1,7 @@
 package helper
 
 import (
-	"INTERN_BCC/entity"
+	"github.com/CRobin69/Destinify-Back_End_Develop/entity"
 	"errors"
 	"log"
 	"os"

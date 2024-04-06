@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"INTERN_BCC/pkg/config"
+	"github.com/CRobin69/Destinify-Back_End_Develop/pkg/config"
 	"log"
 
 	"gorm.io/driver/postgres"

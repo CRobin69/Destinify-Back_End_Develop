@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"INTERN_BCC/pkg/helper"
+	"github.com/CRobin69/Destinify-Back_End_Develop/pkg/helper"
 	"errors"
 	"net/http"
 	"os"

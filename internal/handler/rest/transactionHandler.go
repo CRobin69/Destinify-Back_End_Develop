@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"INTERN_BCC/entity"
-	"INTERN_BCC/model"
-	"INTERN_BCC/pkg/helper"
+	"github.com/CRobin69/Destinify-Back_End_Develop/entity"
+	"github.com/CRobin69/Destinify-Back_End_Develop/model"
+	"github.com/CRobin69/Destinify-Back_End_Develop/pkg/helper"
 
 	"github.com/gin-gonic/gin"
 )

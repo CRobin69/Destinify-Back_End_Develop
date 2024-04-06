@@ -1,8 +1,8 @@
 package service
 
 import (
-	"INTERN_BCC/internal/repository"
-	"INTERN_BCC/pkg/helper"
+	"github.com/CRobin69/Destinify-Back_End_Develop/internal/repository"
+	"github.com/CRobin69/Destinify-Back_End_Develop/pkg/helper"
 )
 
 type Service struct {

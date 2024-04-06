@@ -1,11 +1,11 @@
 package service
 
 import (
-	"INTERN_BCC/entity"
-	"INTERN_BCC/internal/repository"
-	"INTERN_BCC/model"
-	"INTERN_BCC/pkg/helper"
-	"INTERN_BCC/pkg/supabase"
+	"github.com/CRobin69/Destinify-Back_End_Develop/entity"
+	"github.com/CRobin69/Destinify-Back_End_Develop/internal/repository"
+	"github.com/CRobin69/Destinify-Back_End_Develop/model"
+	"github.com/CRobin69/Destinify-Back_End_Develop/pkg/helper"
+	"github.com/CRobin69/Destinify-Back_End_Develop/pkg/supabase"
 
 	"github.com/google/uuid"
 )

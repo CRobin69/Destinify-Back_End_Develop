@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"INTERN_BCC/internal/service"
+	"github.com/CRobin69/Destinify-Back_End_Develop/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
